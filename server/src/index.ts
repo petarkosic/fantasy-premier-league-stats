@@ -4,7 +4,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 
 import apiRoutes from './routes/apiRoutes';
-const PORT = 3000;
+const PORT = 5000;
 
 dotenv.config();
 
