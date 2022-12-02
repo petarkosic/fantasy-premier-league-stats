@@ -15,11 +15,23 @@ function App() {
 	console.log(data);
 
 	return (
-		<div>
-			{data?.teams.map((val: statsModule.Team) => (
-				<div key={val?.code}>{val?.name}</div>
-			))}
-		</div>
+		<>
+			{/* <div>
+				{data?.teams.map((val: statsModule.Team) => (
+					<div key={val?.code}>{val?.name}</div>
+				))}
+			</div> */}
+			<div>
+				{data.elements.map((el: statsModule.Element) => (
+					<div key={el.code}>
+						<span>
+							{el.first_name} {el.second_name}
+						</span>{' '}
+						<span>BPS: {el.bps}</span> <span>XG:{el.expected_goals}</span>
+					</div>
+				))}
+			</div>
+		</>
 	);
 }
 
