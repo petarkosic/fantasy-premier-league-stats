@@ -16,6 +16,7 @@ function App() {
 	return (
 		<>
 			<div className='app'>
+				<input type='text' placeholder='search player by player name' />
 				<div>
 					Gameweek Data{' '}
 					<select name='gameweek'>
