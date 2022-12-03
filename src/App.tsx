@@ -12,24 +12,36 @@ function App() {
 	if (isError) {
 		return <div>{error as ReactNode}</div>;
 	}
-	console.log(data);
 
 	return (
 		<>
-			{/* <div>
-				{data?.teams.map((val: statsModule.Team) => (
-					<div key={val?.code}>{val?.name}</div>
-				))}
-			</div> */}
-			<div>
-				{data.elements.map((el: statsModule.Element) => (
-					<div key={el.code}>
-						<span>
-							{el.first_name} {el.second_name}
-						</span>{' '}
-						<span>BPS: {el.bps}</span> <span>XG:{el.expected_goals}</span>
-					</div>
-				))}
+			<div className='app'>
+				<div>
+					Gameweek Data{' '}
+					<select name='gameweek'>
+						{data?.events.map((val: statsModule.Event) => (
+							<option key={val.id}>{val.name}</option>
+						))}
+					</select>
+				</div>
+				<div>
+					<select name='clubs'>
+						{data?.teams.map((val: statsModule.Team) => (
+							<option key={val?.code}>{val?.name}</option>
+						))}
+					</select>
+				</div>
+				<div>
+					{data.elements.map((el: statsModule.Element) => (
+						<div key={el.code}>
+							<span>
+								{el.first_name} {el.second_name}
+							</span>{' '}
+							<span>BPS: {el.bps}</span> <span>XG:{el.expected_goals}</span>{' '}
+							<span>Goals Scored: {el.goals_scored}</span>
+						</div>
+					))}
+				</div>
 			</div>
 		</>
 	);
