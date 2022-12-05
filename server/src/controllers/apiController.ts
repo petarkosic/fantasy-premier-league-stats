@@ -22,3 +22,22 @@ export const callApi = async (
 		console.error(error.message);
 	}
 };
+
+export const getPlayerImage = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	const code = req.params;
+	console.log(code);
+	a;
+	try {
+		const response = await axios.get(``);
+		res.status(200).json({
+			image: response,
+		});
+	} catch (err) {
+		const error = err as Error;
+		console.error(error.message);
+	}
+};
