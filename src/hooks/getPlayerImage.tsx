@@ -1,8 +1,6 @@
 import api from './../api/statsApi';
 
-export async function getPlayerImage(code) {
-	console.log(code);
-
+export async function getPlayerImage(code: number) {
 	try {
 		const {
 			data: { image },
