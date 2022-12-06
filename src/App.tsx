@@ -2,9 +2,19 @@ import './App.css';
 import { useQuery } from '@tanstack/react-query';
 import { ReactNode } from 'react';
 import { getStats } from './hooks/getStats';
+import { getPlayerImage } from './hooks/getPlayerImage';
 
 function App() {
 	const { data, error, isLoading, isError } = useQuery(['stats'], getStats);
+	const code = data?.elements[0].code; // first player code
+
+	// get player image
+	const {
+		data: playerImage,
+		error: playerError,
+		isLoading: isPlayerImageLoading,
+		isError: isPlayerError,
+	} = useQuery(['player-image', code], () => getPlayerImage(code));
 
 	if (isLoading) {
 		return <div>Loading...</div>;
