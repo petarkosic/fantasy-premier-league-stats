@@ -1,12 +1,14 @@
 import './App.css';
 import { useQuery } from '@tanstack/react-query';
-import { ReactNode, useState } from 'react';
+import { ChangeEvent, ReactNode, useState } from 'react';
 import { getStats } from './hooks/getStats';
 import { getPlayerImage } from './hooks/getPlayerImage';
 
 function App() {
 	const [selectGameweek, setSelectGameweek] = useState<string>('Gameweek 1');
 	const [selectTeam, setSelectTeam] = useState<string>('Arsenal');
+	const [teamCode, setTeamCode] = useState<number>(3);
+	const [playerName, setPlayerName] = useState<string>('');
 	const { data, error, isLoading, isError } = useQuery(['stats'], getStats);
 	const code: number = data?.elements[0].code; // first player code
 
@@ -25,18 +27,32 @@ function App() {
 		return <div>{error as ReactNode}</div>;
 	}
 
-	const handleSelectGameweekChange = (e) => {
+	const handleSelectGameweekChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		setSelectGameweek(e.target.value);
 	};
 
-	const handleSelectTeam = (e) => {
+	const handleSelectTeam = (e: ChangeEvent<HTMLSelectElement>) => {
+		let teamCode = data.teams.filter(
+			(team: statsModule.Team) => team.name === e.target.value
+		)[0].code;
+
 		setSelectTeam(e.target.value);
+		setTeamCode(teamCode);
+	};
+
+	const handleSearchPlayerName = (e: ChangeEvent<HTMLInputElement>) => {
+		setPlayerName(e.target.value);
 	};
 
 	return (
 		<>
 			<div className='app'>
-				<input type='text' placeholder='search player by player name' />
+				<input
+					value={playerName}
+					onChange={(e) => handleSearchPlayerName(e)}
+					type='text'
+					placeholder='search player by player name'
+				/>
 				<div>
 					Gameweek Data{' '}
 					<select
@@ -61,7 +77,7 @@ function App() {
 					</select>
 				</div>
 				<div>
-					{data.elements.map((el: statsModule.Element) => (
+					{/* {data.elements.map((el: statsModule.Element) => (
 						<div key={el.code}>
 							<span>
 								{el.first_name} {el.second_name}
@@ -69,7 +85,13 @@ function App() {
 							<span>BPS: {el.bps}</span> <span>XG:{el.expected_goals}</span>{' '}
 							<span>Goals Scored: {el.goals_scored}</span>
 						</div>
+					))} */}
+					{data.elements.map((el: statsModule.Element) => (
+						<div key={el.id}>{el.team_code == teamCode && el.first_name}</div>
 					))}
+					{/* {data.elements.map((el: statsModule.Element) => (
+						<div>{el.first_name == playerName}</div>
+					))} */}
 				</div>
 			</div>
 		</>
