@@ -32,8 +32,20 @@
 	}
 }
 
+.grid {
+	padding: 2rem;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+	gap: 2rem;
+}
+
 .card {
 	padding: 2em;
+	background: grey;
+	width: 400px;
+	height: 500px;
+	border-radius: 1rem;
 }
 
 .read-the-docs {

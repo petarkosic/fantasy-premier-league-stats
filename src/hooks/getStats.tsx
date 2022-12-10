@@ -10,3 +10,14 @@ export async function getStats() {
 		console.error(error);
 	}
 }
+
+export async function getPlayer(code: number) {
+	try {
+		const {
+			data: { player },
+		} = await api.get(`/player/${code}`);
+		return player;
+	} catch (error) {
+		console.error(error);
+	}
+}

@@ -1,16 +1,25 @@
 import './App.css';
 import { useQuery } from '@tanstack/react-query';
 import { ChangeEvent, ReactNode, useState } from 'react';
-import { getStats } from './hooks/getStats';
+import { getPlayer, getStats } from './hooks/getStats';
 import { getPlayerImage } from './hooks/getPlayerImage';
+import { useDebounce } from './hooks/useDebounce';
+import PlayerCardGrid from './components/PlayerCardGrid';
 
 function App() {
 	const [selectGameweek, setSelectGameweek] = useState<string>('Gameweek 1');
 	const [selectTeam, setSelectTeam] = useState<string>('Arsenal');
 	const [teamCode, setTeamCode] = useState<number>(3);
 	const [playerName, setPlayerName] = useState<string>('');
+
 	const { data, error, isLoading, isError } = useQuery(['stats'], getStats);
 	const code: number = data?.elements[0].code; // first player code
+	let playerCode = 223094; // haaland
+	const { data: playerData } = useQuery(['player', playerCode], () =>
+		getPlayer(playerCode);
+	);
+
+	// const playerNameDebounce = useDebounce(playerName, 1000);
 
 	// get player image
 	const {
@@ -86,14 +95,12 @@ function App() {
 							<span>Goals Scored: {el.goals_scored}</span>
 						</div>
 					))} */}
-					{data.elements.map((el: statsModule.Element) => (
-						<div key={el.id}>{el.team_code == teamCode && el.first_name}</div>
-					))}
 					{/* {data.elements.map((el: statsModule.Element) => (
-						<div>{el.first_name == playerName}</div>
+						<div key={el.id}>{el.team_code == teamCode && el.first_name}</div>
 					))} */}
 				</div>
 			</div>
+			<PlayerCardGrid data={playerData[0]} />
 		</>
 	);
 }
