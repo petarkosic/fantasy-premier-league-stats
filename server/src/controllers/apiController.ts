@@ -29,12 +29,37 @@ export const getPlayerImage = async (
 	next: NextFunction
 ) => {
 	const code = req.params;
-	console.log(code);
-	a;
+
 	try {
-		const response = await axios.get(``);
+		const response = await axios.get(
+			`https://resources.premierleague.com/premierleague/photos/players/110x140/p${code}.png`
+		);
 		res.status(200).json({
 			image: response,
+		});
+	} catch (err) {
+		const error = err as Error;
+		console.error(error.message);
+	}
+};
+
+export const getPlayer = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	const code = req.params;
+
+	try {
+		const response = await axios.get(
+			'https://fantasy.premierleague.com/api/bootstrap-static/'
+		);
+		let filteredPlayer = response.data.elements.filter(
+			(el) => el.code === parseInt(code.code)
+		);
+
+		res.status(200).json({
+			player: filteredPlayer,
 		});
 	} catch (err) {
 		const error = err as Error;
