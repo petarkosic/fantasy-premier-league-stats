@@ -7,19 +7,36 @@ import { useDebounce } from './hooks/useDebounce';
 import PlayerCardGrid from './components/PlayerCardGrid';
 
 function App() {
-	const [selectGameweek, setSelectGameweek] = useState<string>('Gameweek 1');
 	const [selectTeam, setSelectTeam] = useState<string>('Arsenal');
 	const [teamCode, setTeamCode] = useState<number>(3);
 	const [playerName, setPlayerName] = useState<string>('');
 
 	const { data, error, isLoading, isError } = useQuery(['stats'], getStats);
-	const code: number = data?.elements[0].code; // first player code
-	let playerCode = 223094; // haaland
-	const { data: playerData } = useQuery(['player', playerCode], () =>
-		getPlayer(playerCode);
+
+	const [selectGameweek, setSelectGameweek] = useState<string>(
+		data?.events[0].name
 	);
 
-	// const playerNameDebounce = useDebounce(playerName, 1000);
+	const code: number = data?.elements[0].code; // first player code
+	// let playerCode = 223094; // haaland
+	// const { data: playerData } = useQuery(['player', playerCode], () =>
+	// 	getPlayer(playerCode)
+	// );
+
+	const playerNameDebounce = useDebounce(playerName, 1000);
+	let player = data?.elements?.filter(
+		(el: statsModule.Element) =>
+			el.second_name.toLowerCase() == playerName.toLowerCase() ||
+			el.first_name.toLowerCase() == playerName.toLowerCase() ||
+			el.web_name.toLowerCase() == playerName.toLowerCase()
+	);
+
+	const playersFromTeam = data?.elements.filter((el: statsModule.Element) => {
+		if (el.team_code == teamCode) {
+			return el;
+		}
+		return;
+	});
 
 	// get player image
 	const {
@@ -56,14 +73,8 @@ function App() {
 	return (
 		<>
 			<div className='app'>
-				<input
-					value={playerName}
-					onChange={(e) => handleSearchPlayerName(e)}
-					type='text'
-					placeholder='search player by player name'
-				/>
 				<div>
-					Gameweek Data{' '}
+					Gameweek{' '}
 					<select
 						value={selectGameweek}
 						onChange={(e) => handleSelectGameweekChange(e)}
@@ -75,6 +86,7 @@ function App() {
 					</select>
 				</div>
 				<div>
+					Team{' '}
 					<select
 						value={selectTeam}
 						onChange={(e) => handleSelectTeam(e)}
@@ -100,7 +112,14 @@ function App() {
 					))} */}
 				</div>
 			</div>
-			<PlayerCardGrid data={playerData[0]} />
+			<input
+				className='search-input'
+				value={playerName}
+				onChange={(e) => handleSearchPlayerName(e)}
+				type='text'
+				placeholder='search player by player name'
+			/>
+			<PlayerCardGrid data={playerName ? player : playersFromTeam} />
 		</>
 	);
 }

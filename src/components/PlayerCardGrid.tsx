@@ -7,12 +7,9 @@ type PlayerCardGridProps = {
 const PlayerCardGrid = ({ data }: PlayerCardGridProps) => {
 	return (
 		<div className='grid'>
-			<PlayerCard data={data} />
-			<PlayerCard data={data} />
-			<PlayerCard data={data} />
-			<PlayerCard data={data} />
-			<PlayerCard data={data} />
-			<PlayerCard data={data} />
+			{data?.map((player: statsModule.Element) => (
+				<PlayerCard data={player} />
+			))}
 		</div>
 	);
 };
