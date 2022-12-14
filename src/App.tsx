@@ -26,9 +26,9 @@ function App() {
 	const playerNameDebounce = useDebounce(playerName, 1000);
 	let player = data?.elements?.filter(
 		(el: statsModule.Element) =>
-			el.second_name.toLowerCase() == playerName.toLowerCase() ||
-			el.first_name.toLowerCase() == playerName.toLowerCase() ||
-			el.web_name.toLowerCase() == playerName.toLowerCase()
+			el.second_name.toLowerCase().includes(playerName.toLowerCase()) ||
+			el.first_name.toLowerCase().includes(playerName.toLowerCase()) ||
+			el.web_name.toLowerCase().includes(playerName.toLowerCase())
 	);
 
 	const playersFromTeam = data?.elements.filter((el: statsModule.Element) => {
