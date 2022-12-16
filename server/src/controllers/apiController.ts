@@ -32,10 +32,10 @@ export const getPlayerImage = async (
 
 	try {
 		const response = await axios.get(
-			`https://resources.premierleague.com/premierleague/photos/players/110x140/p${code}.png`
+			`https://resources.premierleague.com/premierleague/photos/players/110x140/p${code.code}.png`
 		);
 		res.status(200).json({
-			image: response,
+			image: response.config.url,
 		});
 	} catch (err) {
 		const error = err as Error;
