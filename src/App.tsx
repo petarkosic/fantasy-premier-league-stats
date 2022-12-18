@@ -11,13 +11,15 @@ function App() {
 	const [teamCode, setTeamCode] = useState<number>(3);
 	const [playerName, setPlayerName] = useState<string>('');
 
-	const { data, error, isLoading, isError } = useQuery(['stats'], getStats);
+	const { data, error, isLoading, isError } = useQuery(['stats'], getStats, {
+		refetchOnWindowFocus: false,
+	});
 
 	const [selectGameweek, setSelectGameweek] = useState<string>(
 		data?.events[0].name
 	);
 
-	const code: number = data?.elements[0].code; // first player code
+	// const code: number = data?.elements[0].code; // first player code
 	// let playerCode = 223094; // haaland
 	// const { data: playerData } = useQuery(['player', playerCode], () =>
 	// 	getPlayer(playerCode)
@@ -38,13 +40,13 @@ function App() {
 		return;
 	});
 
-	// get player image
-	const {
-		data: playerImage,
-		error: playerError,
-		isLoading: isPlayerImageLoading,
-		isError: isPlayerError,
-	} = useQuery(['player-image', code], () => getPlayerImage(code));
+	// // get player image
+	// const {
+	// 	data: playerImage,
+	// 	error: playerError,
+	// 	isLoading: isPlayerImageLoading,
+	// 	isError: isPlayerError,
+	// } = useQuery(['player-image', code], () => getPlayerImage(code));
 
 	if (isLoading) {
 		return <div>Loading...</div>;
