@@ -14,7 +14,10 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 		error: playerError,
 		isLoading: isPlayerImageLoading,
 		isError: isPlayerError,
-	} = useQuery(['player-image', code], () => getPlayerImage(code));
+	} = useQuery(['player-image', code], () => getPlayerImage(code), {
+		cacheTime: Infinity,
+		staleTime: Infinity,
+	});
 
 	return (
 		<div className='card-wrapper'>
@@ -25,7 +28,11 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 						<p>{data.second_name}</p>
 					</div>
 					<div className='card-top--image'>
-						<img src={playerImage} alt='player image' />
+						{isPlayerImageLoading ? (
+							<img src={'../../public/transparent.png'} alt='' />
+						) : (
+							<img src={playerImage} alt='player image' />
+						)}
 					</div>
 				</div>
 				<hr className='divider' />

@@ -1,9 +1,7 @@
 import './App.css';
 import { useQuery } from '@tanstack/react-query';
-import { ChangeEvent, ReactNode, useState } from 'react';
-import { getPlayer, getStats } from './hooks/getStats';
-import { getPlayerImage } from './hooks/getPlayerImage';
-import { useDebounce } from './hooks/useDebounce';
+import { ChangeEvent, ReactNode, useMemo, useState } from 'react';
+import { getStats } from './hooks/getStats';
 import PlayerCardGrid from './components/PlayerCardGrid';
 
 function App() {
@@ -21,32 +19,29 @@ function App() {
 
 	// const code: number = data?.elements[0].code; // first player code
 	// let playerCode = 223094; // haaland
+	// let playerCode = 226597;
 	// const { data: playerData } = useQuery(['player', playerCode], () =>
 	// 	getPlayer(playerCode)
 	// );
 
-	const playerNameDebounce = useDebounce(playerName, 1000);
-	let player = data?.elements?.filter(
-		(el: statsModule.Element) =>
-			el.second_name.toLowerCase().includes(playerName.toLowerCase()) ||
-			el.first_name.toLowerCase().includes(playerName.toLowerCase()) ||
-			el.web_name.toLowerCase().includes(playerName.toLowerCase())
-	);
+	// const playerNameDebounce = useDebounce(playerName, 1000);
+	let player = useMemo(() => {
+		return data?.elements?.filter(
+			(el: statsModule.Element) =>
+				el.second_name.toLowerCase().includes(playerName.toLowerCase()) ||
+				el.first_name.toLowerCase().includes(playerName.toLowerCase()) ||
+				el.web_name.toLowerCase().includes(playerName.toLowerCase())
+		);
+	}, [data, playerName]);
 
-	const playersFromTeam = data?.elements.filter((el: statsModule.Element) => {
-		if (el.team_code == teamCode) {
-			return el;
-		}
-		return;
-	});
-
-	// // get player image
-	// const {
-	// 	data: playerImage,
-	// 	error: playerError,
-	// 	isLoading: isPlayerImageLoading,
-	// 	isError: isPlayerError,
-	// } = useQuery(['player-image', code], () => getPlayerImage(code));
+	const playersFromTeam = useMemo(() => {
+		return data?.elements.filter((el: statsModule.Element) => {
+			if (el.team_code == teamCode) {
+				return el;
+			}
+			return;
+		});
+	}, [selectTeam, player]);
 
 	if (isLoading) {
 		return <div>Loading...</div>;
@@ -99,26 +94,12 @@ function App() {
 						))}
 					</select>
 				</div>
-				<div>
-					{/* {data.elements.map((el: statsModule.Element) => (
-						<div key={el.code}>
-							<span>
-								{el.first_name} {el.second_name}
-							</span>{' '}
-							<span>BPS: {el.bps}</span> <span>XG:{el.expected_goals}</span>{' '}
-							<span>Goals Scored: {el.goals_scored}</span>
-						</div>
-					))} */}
-					{/* {data.elements.map((el: statsModule.Element) => (
-						<div key={el.id}>{el.team_code == teamCode && el.first_name}</div>
-					))} */}
-				</div>
 			</div>
 			<input
 				className='search-input'
 				value={playerName}
-				onChange={(e) => handleSearchPlayerName(e)}
-				type='text'
+				onChange={handleSearchPlayerName}
+				type='search'
 				placeholder='search player by player name'
 			/>
 			<PlayerCardGrid data={playerName ? player : playersFromTeam} />
