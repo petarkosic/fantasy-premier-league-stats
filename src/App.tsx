@@ -69,10 +69,11 @@ function App() {
 
 	return (
 		<>
-			<div className='app'>
-				<div>
+			<div className='select-menu'>
+				<div className='select gameweek'>
 					Gameweek{' '}
 					<select
+						className='select-dropdown'
 						value={selectGameweek}
 						onChange={(e) => handleSelectGameweekChange(e)}
 						name='gameweek'
@@ -82,9 +83,10 @@ function App() {
 						))}
 					</select>
 				</div>
-				<div>
+				<div className='select team'>
 					Team{' '}
 					<select
+						className='select-dropdown'
 						value={selectTeam}
 						onChange={(e) => handleSelectTeam(e)}
 						name='clubs'

@@ -32,6 +32,30 @@
 	}
 }
 
+.select-menu {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 7rem;
+	height: 50px;
+}
+
+.select {
+	display: flex;
+	height: 2rem;
+	width: 250px;
+	align-items: center;
+	justify-content: space-around;
+}
+
+.select-dropdown {
+	height: 100%;
+	width: 60%;
+	cursor: pointer;
+	border-radius: 2px;
+	padding: 0 0.5rem;
+}
+
 .search-input {
 	width: 40rem;
 	height: 3rem;
