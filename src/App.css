@@ -38,6 +38,7 @@
 	justify-content: center;
 	gap: 7rem;
 	height: 50px;
+	width: 100%;
 }
 
 .select {
@@ -74,6 +75,12 @@
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
 	gap: 2rem;
+}
+
+@media (max-width: 860px) {
+	.grid {
+		place-items: center;
+	}
 }
 
 .card-wrapper {

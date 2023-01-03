@@ -3,11 +3,16 @@ import { useQuery } from '@tanstack/react-query';
 import { ChangeEvent, ReactNode, useMemo, useState } from 'react';
 import { getStats } from './hooks/getStats';
 import PlayerCardGrid from './components/PlayerCardGrid';
+import { Link, Route, Routes, useLocation } from 'react-router-dom';
+import { GameweekSelect } from './components/GameweekSelect';
+import { GameweekData } from './components/GameweekData';
 
 function App() {
 	const [selectTeam, setSelectTeam] = useState<string>('Arsenal');
 	const [teamCode, setTeamCode] = useState<number>(3);
 	const [playerName, setPlayerName] = useState<string>('');
+
+	const location = useLocation();
 
 	const { data, error, isLoading, isError } = useQuery(['stats'], getStats, {
 		refetchOnWindowFocus: false,
@@ -70,18 +75,23 @@ function App() {
 	return (
 		<>
 			<div className='select-menu'>
-				<div className='select gameweek'>
-					Gameweek{' '}
-					<select
-						className='select-dropdown'
-						value={selectGameweek}
-						onChange={(e) => handleSelectGameweekChange(e)}
-						name='gameweek'
-					>
-						{data?.events.map((val: statsModule.Event) => (
-							<option key={val.id}>{val.name}</option>
-						))}
-					</select>
+				<div className='select'>
+					<Link to='/gameweek'>
+						{location.pathname === '/gameweek' ? null : 'Gameweek Data'}
+					</Link>
+					<Routes>
+						<Route
+							path='/gameweek'
+							element={
+								<GameweekSelect
+									data={data}
+									selectGameweek={selectGameweek}
+									handleSelectGameweekChange={handleSelectGameweekChange}
+								/>
+							}
+						/>
+						<Route path='/' element={null} />
+					</Routes>
 				</div>
 				<div className='select team'>
 					Team{' '}
@@ -104,7 +114,11 @@ function App() {
 				type='search'
 				placeholder='search player by player name'
 			/>
-			<PlayerCardGrid data={playerName ? player : playersFromTeam} />
+			{location.pathname === '/gameweek' ? (
+				<GameweekData data={data} selectGameweek={selectGameweek} />
+			) : (
+				<PlayerCardGrid data={playerName ? player : playersFromTeam} />
+			)}
 		</>
 	);
 }
