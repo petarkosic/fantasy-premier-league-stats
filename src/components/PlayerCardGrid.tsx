@@ -1,7 +1,7 @@
 import PlayerCard from './PlayerCard';
 
 type PlayerCardGridProps = {
-	data: statsModule.Element[];
+	data: statsModule.Element[] | undefined | null;
 };
 
 const PlayerCardGrid = ({ data }: PlayerCardGridProps) => {
