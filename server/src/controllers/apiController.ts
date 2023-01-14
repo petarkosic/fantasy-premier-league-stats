@@ -28,11 +28,11 @@ export const getPlayerImage = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	const code = req.params;
+	const { code } = req.params;
 
 	try {
 		const response = await axios.get(
-			`https://resources.premierleague.com/premierleague/photos/players/110x140/p${code.code}.png`
+			`https://resources.premierleague.com/premierleague/photos/players/110x140/p${code}.png`
 		);
 		res.status(200).json({
 			image: response.config.url,
@@ -48,18 +48,39 @@ export const getPlayer = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	const code = req.params;
+	const { code } = req.params;
 
 	try {
 		const response = await axios.get(
 			'https://fantasy.premierleague.com/api/bootstrap-static/'
 		);
 		let filteredPlayer = response.data.elements.filter(
-			(el) => el.code === parseInt(code.code)
+			(el) => el.code === parseInt(code)
 		);
 
 		res.status(200).json({
 			player: filteredPlayer,
+		});
+	} catch (err) {
+		const error = err as Error;
+		console.error(error.message);
+	}
+};
+
+export const getPlayerSummary = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	const { id } = req.params;
+
+	try {
+		const response = await axios.get(
+			`https://fantasy.premierleague.com/api/element-summary/${parseInt(id)}/`
+		);
+
+		res.status(200).json({
+			playerSummary: response.data,
 		});
 	} catch (err) {
 		const error = err as Error;
