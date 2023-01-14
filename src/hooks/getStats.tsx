@@ -21,3 +21,14 @@ export async function getPlayer(code: number) {
 		console.error(error);
 	}
 }
+
+export async function getPlayerSummary(id: number) {
+	try {
+		const {
+			data: { playerSummary },
+		} = await api.get(`/player-summary/${id}`);
+		return playerSummary;
+	} catch (error) {
+		console.error(error);
+	}
+}

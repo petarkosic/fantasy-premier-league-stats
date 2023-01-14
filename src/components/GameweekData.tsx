@@ -1,4 +1,5 @@
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getPlayerSummary } from '../hooks/getStats';
 
 type GameweekDataProps = {
 	selectGameweek: string | undefined;
@@ -43,6 +44,16 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		top_element_info,
 		transfers_made,
 	} = currentGameweek?.[0];
+
+	let playerId = top_element_info.id;
+
+	// get player summary
+	const {
+		data: playerSummary,
+		error: playerError,
+		isLoading: isPlayerImageLoading,
+		isError: isPlayerError,
+	} = useQuery(['player-summary', playerId], () => getPlayerSummary(playerId));
 
 	if (loading) {
 		return <div>Loading....</div>;
