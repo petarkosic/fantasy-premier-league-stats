@@ -83,6 +83,16 @@
 	}
 }
 
+.dashboard-wrapper {
+	border: 1px solid red;
+	width: 100%;
+}
+
+.dashboard {
+	border: 1px solid blue;
+	margin: 20px;
+}
+
 .card-wrapper {
 	width: 400px;
 	height: 500px;
