@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import PlayerCardGrid from '../components/PlayerCardGrid';
 import { Search } from '../components/Search';
 import { getStats } from '../hooks/getStats';
+import { useDebounce } from '../hooks/useDebounce';
 
 export const Home = () => {
 	const [playerName, setPlayerName] = useState<string>('');
@@ -11,6 +12,7 @@ export const Home = () => {
 	// const data: statsModule.RootObject | undefined = queryClient.getQueryData({
 	// 	stats: 'stats',
 	// });
+	let debouncedPlayerName = useDebounce<string>(playerName, 1000);
 
 	const { data, error, isLoading, isError } = useQuery(['stats'], getStats, {
 		refetchOnWindowFocus: false,
@@ -23,7 +25,7 @@ export const Home = () => {
 				el.first_name.toLowerCase().includes(playerName.toLowerCase()) ||
 				el.web_name.toLowerCase().includes(playerName.toLowerCase())
 		);
-	}, [data, playerName]);
+	}, [debouncedPlayerName]);
 
 	const handleSearchPlayerName = (e: ChangeEvent<HTMLInputElement>) => {
 		setPlayerName(e.target.value);
