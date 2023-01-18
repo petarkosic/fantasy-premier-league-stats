@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getPlayerImage } from '../hooks/getPlayerImage';
 import { getPlayerSummary } from '../hooks/getStats';
-import { formatNumber } from '../utils/formatNumber';
+import { formatCurrency, formatNumber } from '../utils/formatNumber';
 
 type GameweekDataProps = {
 	selectGameweek: string | undefined;
@@ -58,8 +58,12 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		error,
 		isLoading,
 		isError,
-	} = useQuery(['player-image', topElement?.[0].code], () =>
-		getPlayerImage(topElement?.[0].code as number)
+	} = useQuery(
+		['player-image', topElement?.[0].code],
+		() => getPlayerImage(topElement?.[0].code as number),
+		{
+			refetchOnWindowFocus: false,
+		}
 	);
 
 	// get player summary
@@ -80,46 +84,71 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 	let currentRound = playerSummary?.history?.filter((gw) => {
 		return gw.round === parseInt(selectedGameweekRound as string);
 	});
+	let mostSelected = data?.elements.filter((el) => el.id == most_selected);
+	let mostTransferedIn = data?.elements.filter(
+		(el) => el.id == most_transferred_in
+	);
 
 	return (
 		<div>
 			<div className='dashboard-wrapper'>
 				<div className='dashboard'>
-					<p>Transfers Made: {formatNumber(transfers_made)}</p>
-					<div className='card'>
+					<div className='dashboard--gw'>
+						<p>Transfers Made: {formatNumber(transfers_made)}</p>
+						<p>Average Score: {average_entry_score}</p>
 						<p>Highest Score: {highest_score}</p>
-						<p>Most Selected: {most_selected}</p>
-						<p>Most Transferred In: {most_transferred_in}</p>
-					</div>
-					<div className='card-top--image'>
-						{isPlayerImageLoading ? (
-							<img src={'/transparent.png'} alt='' />
-						) : (
-							<img src={playerImage} alt='player image' />
-						)}
-					</div>
-					<div className=''>
-						{currentRound?.map((el) => (
-							<div key={el.round}>
-								<p>Total points: {el.total_points}</p>
-								<p>Selected by: {formatNumber(el.selected)}</p>
-							</div>
-						))}
-					</div>
-					{topElement?.map((el) => (
-						<div key={el.id}>
-							<p>{el.first_name}</p>
-							<p>{el.second_name}</p>
+						<p>
+							Most Selected: {mostSelected?.[0].first_name}{' '}
+							{mostSelected?.[0].second_name}
+						</p>
+						<p>
+							Most Transferred In: {mostTransferedIn?.[0].first_name}{' '}
+							{mostTransferedIn?.[0].second_name}
+						</p>
+						<div>
+							{chip_plays.map((chip: statsModule.ChipPlay) => (
+								<div key={chip.chip_name}>
+									<span>{chip.chip_name}</span> <span>{chip.num_played}</span>
+								</div>
+							))}
 						</div>
-					))}
-					<p>Top Element ID: {top_element_info.id}</p>
-					<p>Top Element Points{top_element_info.points}</p>
-					<div>
-						{chip_plays.map((chip: statsModule.ChipPlay) => (
-							<div key={chip.chip_name}>
-								<span>{chip.chip_name}</span> <span>{chip.num_played}</span>
+					</div>
+					<div className='player--info'>
+						<div className='card-wrapper'>
+							<div className='card'>
+								<div className='card-top'>
+									{topElement?.map((el) => (
+										<div className='card-top--name' key={el.id}>
+											<p>{el.first_name}</p>
+											<p>{el.second_name}</p>
+										</div>
+									))}
+									<div className='card-top--image'>
+										{isPlayerImageLoading ? (
+											<img src={'/transparent.png'} alt='' />
+										) : (
+											<img src={playerImage} alt='player image' />
+										)}
+									</div>
+								</div>
+								<div className='divider'></div>
+								<div className='card-bottom'>
+									<p>{formatCurrency(currentRound?.[0].value)}</p>
+									<p>Points: {top_element_info.points}</p>
+									<p>
+										Selected by: {formatNumber(currentRound?.[0].selected)}{' '}
+										players
+									</p>
+									<p>
+										Transfers in: {formatNumber(currentRound?.[0].transfers_in)}
+									</p>
+									<p>
+										Transfers out:{' '}
+										{formatNumber(currentRound?.[0].transfers_out)}
+									</p>
+								</div>
 							</div>
-						))}
+						</div>
 					</div>
 				</div>
 			</div>

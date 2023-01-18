@@ -91,6 +91,9 @@
 .dashboard {
 	border: 1px solid blue;
 	margin: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .card-wrapper {
