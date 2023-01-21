@@ -81,9 +81,11 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 	}
 
 	let selectedGameweekRound = selectGameweek?.split(' ')[1];
-	let currentRound = playerSummary?.history?.filter((gw) => {
-		return gw.round === parseInt(selectedGameweekRound as string);
-	});
+	let currentRound = playerSummary?.history?.filter(
+		(gw: gameweekModule.History) => {
+			return gw.round === parseInt(selectedGameweekRound as string);
+		}
+	);
 	let mostSelected = data?.elements.filter((el) => el.id == most_selected);
 	let mostTransferedIn = data?.elements.filter(
 		(el) => el.id == most_transferred_in
