@@ -76,7 +76,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		refetchOnWindowFocus: false,
 	});
 
-	if (loading) {
+	if (isLoading || isPlayerImageLoading) {
 		return <div>Loading....</div>;
 	}
 
@@ -154,52 +154,4 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 			</div>
 		</div>
 	);
-
-	// return (
-	// 	<div>
-	// 		<div className='card-wrapper'>
-	// 			<div className='card'>
-	// 				<div className='card-top'>
-	// 					<div className='card-top--name'>
-	// 						<p>{average_entry_score}</p>
-	// 						<div style={{ width: '100%' }}>
-	// 							{chip_plays.map((chip: statsModule.ChipPlay) => (
-	// 								<div
-	// 									key={chip.chip_name}
-	// 									style={{
-	// 										width: '100%',
-	// 										display: 'flex',
-	// 										alignItems: 'center',
-	// 										justifyContent: 'space-between',
-	// 									}}
-	// 								>
-	// 									<span>{chip.chip_name}</span>
-	// 									<span>{chip.num_played}</span>
-	// 								</div>
-	// 							))}
-	// 						</div>
-	// 						<div className='divider'></div>
-	// 						{/* <p>Highest Scoring Entry: {highest_scoring_entry}</p>
-	// 						<p>Highest Score: {highest_score}</p>
-	// 						<p>Most Selected: {most_selected}</p>
-	// 						<p>Most Transferred In: {most_transferred_in}</p>
-	// 						<p>Top Element ID: {top_element_info.id}</p>
-	// 						<p>Top Element Points{top_element_info.points}</p>
-	// 						<p>Most Captained: {most_captained}</p>
-	// 						<p>Most Vice Captained: {most_vice_captained}</p>
-	// 						<p>Transfers Made: {transfers_made}</p> */}
-	// 					</div>
-	// 					{/* <div className='card-top--image'>
-	// 						{isPlayerImageLoading ? (
-	// 							<img src={'/transparent.png'} alt='' />
-	// 						) : (
-	// 							<img src={playerImage} alt='player image' />
-	// 						)}
-	// 					</div> */}
-	// 				</div>
-	// 				<div className='card-bottom'>hello</div>
-	// 			</div>
-	// 		</div>
-	// 	</div>
-	// );
 };

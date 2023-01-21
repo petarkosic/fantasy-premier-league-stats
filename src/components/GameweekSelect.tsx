@@ -24,9 +24,11 @@ export const GameweekSelect = ({
 				onChange={(e) => handleSelectGameweekChange(e)}
 				name='gameweek'
 			>
-				{data?.events?.map((val: statsModule.Event) => (
-					<option key={val.id}>{val.name}</option>
-				))}
+				{data?.events?.map((val: statsModule.Event) =>
+					(val.finished || val.is_current) && val.name !== 'Gameweek 7' ? (
+						<option key={val.id}>{val.name}</option>
+					) : null
+				)}
 			</select>
 		</div>
 	);
