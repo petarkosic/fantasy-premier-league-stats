@@ -120,10 +120,14 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 							Most Transferred In: {mostTransferedIn?.[0].first_name}{' '}
 							{mostTransferedIn?.[0].second_name}
 						</p>
-						<div>
+						<div className='chip--wrapper'>
 							{chip_plays.map((chip: statsModule.ChipPlay) => (
-								<div key={chip.chip_name}>
-									<span>{chip.chip_name}</span> <span>{chip.num_played}</span>
+								<div
+									className={`chip_play chip--${chip.chip_name}`}
+									key={chip.chip_name}
+								>
+									<span className='chip--name'>{chip.chip_name}</span>{' '}
+									<span className='chip--num_played'>{chip.num_played}</span>
 								</div>
 							))}
 						</div>
