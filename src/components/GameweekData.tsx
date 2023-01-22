@@ -91,6 +91,11 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		(el) => el.id == most_transferred_in
 	);
 
+	let mostCaptained = data?.elements.filter((el) => el.id == most_captained);
+	let mostViceCaptained = data?.elements.filter(
+		(el) => el.id == most_vice_captained
+	);
+
 	return (
 		<div>
 			<div className='dashboard-wrapper'>
@@ -102,6 +107,14 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 						<p>
 							Most Selected: {mostSelected?.[0].first_name}{' '}
 							{mostSelected?.[0].second_name}
+						</p>
+						<p>
+							Most Captained: {mostCaptained?.[0].first_name}{' '}
+							{mostCaptained?.[0].second_name}
+						</p>
+						<p>
+							Most Vice Captained: {mostViceCaptained?.[0].first_name}{' '}
+							{mostViceCaptained?.[0].second_name}
 						</p>
 						<p>
 							Most Transferred In: {mostTransferedIn?.[0].first_name}{' '}
