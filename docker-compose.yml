@@ -1,0 +1,28 @@
+version: '3'
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: fpl-server
+    ports:
+      - '5000:5000'
+    volumes:
+      - /app/node_modules
+      - ./server:/usr/src/app
+    networks:
+      - fpl-net
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: fpl-client
+    ports:
+      - '3000:3000'
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    networks:
+      - fpl-net
+networks:
+  fpl-net:
