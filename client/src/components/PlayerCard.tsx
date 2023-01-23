@@ -29,7 +29,7 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 					</div>
 					<div className='card-top--image'>
 						{isPlayerImageLoading ? (
-							<img src={'/transparent.png'} alt='' />
+							<img src={'./../assets/transparent.png'} alt='' />
 						) : (
 							<img src={playerImage} alt='player image' />
 						)}

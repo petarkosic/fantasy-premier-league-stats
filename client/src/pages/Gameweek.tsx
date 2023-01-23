@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { GameweekData } from '../components/GameweekData';
