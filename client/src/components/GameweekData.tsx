@@ -102,25 +102,48 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 			<div className='dashboard-wrapper'>
 				<div className='dashboard'>
 					<div className='dashboard--gw'>
-						<p>Transfers Made: {formatNumber(transfers_made)}</p>
-						<p>Average Score: {average_entry_score}</p>
-						<p>Highest Score: {highest_score}</p>
-						<p>
-							Most Selected: {mostSelected?.[0].first_name}{' '}
-							{mostSelected?.[0].second_name}
+						<p className='transfers'>
+							Transfers Made: {formatNumber(transfers_made)}
 						</p>
-						<p>
-							Most Captained: {mostCaptained?.[0].first_name}{' '}
-							{mostCaptained?.[0].second_name}
-						</p>
-						<p>
-							Most Vice Captained: {mostViceCaptained?.[0].first_name}{' '}
-							{mostViceCaptained?.[0].second_name}
-						</p>
-						<p>
-							Most Transferred In: {mostTransferedIn?.[0].first_name}{' '}
-							{mostTransferedIn?.[0].second_name}
-						</p>
+						<div className='score'>
+							<div>
+								<p>Average Score:</p>
+								<span>{average_entry_score}</span>
+							</div>
+							<div>
+								<p>Highest Score:</p>
+								<span>{highest_score}</span>
+							</div>
+						</div>
+						<div className='most-player'>
+							<div className='most selected'>
+								<p>Most Selected:</p>
+								<span>
+									{mostSelected?.[0].first_name} {mostSelected?.[0].second_name}
+								</span>
+							</div>
+							<div className='most captained'>
+								<p>Most Captained:</p>
+								<span>
+									{mostCaptained?.[0].first_name}{' '}
+									{mostCaptained?.[0].second_name}
+								</span>
+							</div>
+							<div className='most vice-captained'>
+								<p>Most Vice Captained:</p>
+								<span>
+									{mostViceCaptained?.[0].first_name}{' '}
+									{mostViceCaptained?.[0].second_name}
+								</span>
+							</div>
+							<div className='most transferred'>
+								<p>Most Transferred In:</p>
+								<span>
+									{mostTransferedIn?.[0].first_name}{' '}
+									{mostTransferedIn?.[0].second_name}
+								</span>
+							</div>
+						</div>
 						<div className='chip--wrapper'>
 							{chip_plays.map((chip: statsModule.ChipPlay) => (
 								<div

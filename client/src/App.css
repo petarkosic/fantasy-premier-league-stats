@@ -97,11 +97,111 @@
 }
 
 .dashboard--gw {
-	width: 100%;
+	width: 50%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
+	border: 1px solid green;
+}
+
+.transfers {
+	background: red;
+}
+
+.score {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 2rem;
+}
+
+.score div {
+	width: 100px;
+	height: 100px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+	border-radius: 0.5rem;
+	position: relative;
+	box-shadow: inset 0 0 20px 1px rgba(154, 59, 251, 0.4);
+}
+
+.score div p {
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 10px;
+	color: #9a3bfb;
+	font-size: 1rem;
+	font-weight: bold;
+	line-height: 15px;
+	text-align: left;
+}
+
+.score div span {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	padding: 10px;
+	font-size: 1.25rem;
+	font-weight: bold;
+}
+
+.most-player {
+	width: 100%;
+	height: 100%;
+	padding: 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 1rem;
+}
+
+.most-player .most {
+	width: 200px;
+	height: 100px;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	box-shadow: inset 0 0 20px 1px rgba(154, 59, 251, 0.4);
+	border-radius: 0.5rem;
+	position: relative;
+}
+
+.most-player .most p {
+	color: #9a3bfb;
+}
+
+.most-player .most span {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	padding: 10px;
+	font-size: 1.25rem;
+	font-weight: bold;
+}
+
+.selected {
+	/* background: yellow; */
+}
+
+.captained {
+	/* background: khaki; */
+}
+
+.vice-captained {
+	/* background: salmon; */
+}
+
+.transferred {
+	/* background: green; */
 }
 
 .chip--wrapper {
@@ -109,7 +209,8 @@
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	gap: 0.5rem;
+	gap: 1rem;
+	padding-right: 1rem;
 }
 
 .chip_play {
@@ -126,13 +227,13 @@
 }
 
 .chip--name {
-	font-size: 1rem;
-	font-weight: bold;
 	position: absolute;
 	top: 0;
 	left: 0;
 	padding: 10px;
 	color: #9a3bfb;
+	font-size: 1rem;
+	font-weight: bold;
 }
 
 .chip--name::after {
@@ -150,7 +251,6 @@
 }
 
 .chip--num_played {
-	font-size: 1rem;
 	font-weight: bold;
 	position: absolute;
 	bottom: 0;
@@ -180,6 +280,7 @@
 	height: 500px;
 	border-radius: 1rem;
 	background: #333;
+	margin-right: 10rem;
 }
 
 .card {
