@@ -102,9 +102,10 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 			<div className='dashboard-wrapper'>
 				<div className='dashboard'>
 					<div className='dashboard--gw'>
-						<p className='transfers'>
-							Transfers Made: {formatNumber(transfers_made)}
-						</p>
+						<div className='transfers'>
+							<p>Transfers Made:</p>
+							<span>{formatNumber(transfers_made)}</span>
+						</div>
 						<div className='score'>
 							<div>
 								<p>Average Score:</p>
