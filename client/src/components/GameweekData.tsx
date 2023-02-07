@@ -182,6 +182,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 								<div className='divider'></div>
 								<div className='card-bottom'>
 									<p>{formatCurrency(currentRound?.[0].value)}</p>
+									<p>{currentRound?.[0].value}</p>
 									<p>Points: {top_element_info.points}</p>
 									<p>
 										Selected by: {formatNumber(currentRound?.[0].selected)}{' '}
