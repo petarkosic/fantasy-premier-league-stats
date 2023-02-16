@@ -14,12 +14,14 @@
 		"axios": "^1.2.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
-		"react-router-dom": "^6.6.1"
+		"react-router-dom": "^6.6.1",
+		"recharts": "^2.4.1"
 	},
 	"devDependencies": {
 		"@rollup/plugin-typescript": "8.3.3",
 		"@types/react": "^18.0.24",
 		"@types/react-dom": "^18.0.8",
+		"@types/recharts": "^1.8.24",
 		"@vitejs/plugin-react": "^2.2.0",
 		"typescript": "^4.6.4",
 		"vite": "^3.2.3"

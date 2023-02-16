@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getPlayerImage } from '../hooks/getPlayerImage';
 import { getPlayerSummary } from '../hooks/getStats';
 import { formatCurrency, formatNumber } from '../utils/formatNumber';
+import { Chart } from './Chart';
 
 type GameweekDataProps = {
 	selectGameweek: string | undefined;
@@ -200,6 +201,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 					</div>
 				</div>
 			</div>
+			<Chart playerSummary={playerSummary} />
 		</div>
 	);
 };
