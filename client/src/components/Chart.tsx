@@ -68,7 +68,7 @@ export const Chart = ({ playerSummary }: ChartProps) => {
 					dataKey='assists'
 					stroke='#4e810b'
 					fillOpacity={1}
-					fill='url(#colorTop)'
+					fill='url(#colorBottom)'
 				/>
 			</AreaChart>
 		</div>
