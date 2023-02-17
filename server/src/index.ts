@@ -7,9 +7,9 @@ import slowDown from 'express-slow-down';
 
 import apiRoutes from './routes/apiRoutes';
 
-const limiter = rateLimit({
+const rateLimiter = rateLimit({
 	windowMs: 10 * 1000, // 10 seconds
-	max: 10, // Limit each IP to 10 requests per `window` (here, per 10 seconds)
+	max: 50, // Limit each IP to 50 requests per `window` (here, per 10 seconds)
 	message:
 		'Too many requests made from this IP, please try again after 10 seconds',
 });
@@ -33,7 +33,7 @@ app.get('/', (req: Request, res: Response) => {
 	res.send('Hello from api');
 });
 
-app.use('/api', limiter, speedLimiter, apiRoutes);
+app.use('/api', rateLimiter, speedLimiter, apiRoutes);
 
 app.listen(PORT, () => {
 	console.log(`App listening on port ${PORT}`);
