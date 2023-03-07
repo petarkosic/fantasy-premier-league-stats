@@ -5,6 +5,7 @@ import {
 	YAxis,
 	Area,
 	Tooltip,
+	Legend,
 } from 'recharts';
 
 type ChartProps = {
@@ -16,7 +17,7 @@ export const Chart = ({ playerSummary }: ChartProps) => {
 		<div className='chart'>
 			<AreaChart
 				width={730}
-				height={250}
+				height={280}
 				data={playerSummary?.history}
 				margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
 			>
@@ -70,6 +71,7 @@ export const Chart = ({ playerSummary }: ChartProps) => {
 					fillOpacity={1}
 					fill='url(#colorBottom)'
 				/>
+				<Legend verticalAlign='top' height={36} />
 			</AreaChart>
 		</div>
 	);
