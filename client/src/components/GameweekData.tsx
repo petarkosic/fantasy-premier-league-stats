@@ -4,6 +4,8 @@ import { getPlayerImage } from '../hooks/getPlayerImage';
 import { getPlayerSummary } from '../hooks/getStats';
 import { formatCurrency, formatNumber } from '../utils/formatNumber';
 import { Chart } from './Chart';
+import { PlayerName } from './PlayerName';
+import { PlayerImage } from './PlayerImage';
 
 type GameweekDataProps = {
 	selectGameweek: string | undefined;
@@ -167,18 +169,16 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 							<div className='card'>
 								<div className='card-top'>
 									{topElement?.map((el) => (
-										<div className='card-top--name' key={el.id}>
-											<p>{el.first_name}</p>
-											<p>{el.second_name}</p>
-										</div>
+										<PlayerName
+											id={el.id}
+											firstName={el.first_name}
+											secondName={el.second_name}
+										/>
 									))}
-									<div className='card-top--image'>
-										{isPlayerImageLoading ? (
-											<img src={'./../assets/transparent.png'} alt='' />
-										) : (
-											<img src={playerImage} alt='player image' />
-										)}
-									</div>
+									<PlayerImage
+										isPlayerImageLoading={isPlayerImageLoading}
+										playerImage={playerImage}
+									/>
 								</div>
 								<div className='divider'></div>
 								<div className='card-bottom'>

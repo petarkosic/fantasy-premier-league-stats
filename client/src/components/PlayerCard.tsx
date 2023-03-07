@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getPlayerImage } from '../hooks/getPlayerImage';
+import { PlayerName } from './PlayerName';
+import { PlayerImage } from './PlayerImage';
 
 type PlayerCardProps = {
 	data: statsModule.Element;
@@ -23,17 +25,15 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 		<div className='card-wrapper'>
 			<div className='card'>
 				<div className='card-top'>
-					<div className='card-top--name'>
-						<p>{data.first_name}</p>
-						<p>{data.second_name}</p>
-					</div>
-					<div className='card-top--image'>
-						{isPlayerImageLoading ? (
-							<img src={'./../assets/transparent.png'} alt='' />
-						) : (
-							<img src={playerImage} alt='player image' />
-						)}
-					</div>
+					<PlayerName
+						id={data.id}
+						firstName={data.first_name}
+						secondName={data.second_name}
+					/>
+					<PlayerImage
+						isPlayerImageLoading={isPlayerImageLoading}
+						playerImage={playerImage}
+					/>
 				</div>
 				<hr className='divider' />
 				<div className='card-bottom'>
