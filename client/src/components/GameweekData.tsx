@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { useRef } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getPlayerImage } from '../hooks/getPlayerImage';
 import { getPlayerSummary } from '../hooks/getStats';
@@ -24,6 +25,20 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 			return ev.name == selectGameweek;
 		}
 	);
+
+	const chipPlayCardRef = useRef([]);
+
+	function handleMouseMove(event, idx) {
+		chipPlayCardRef.current[idx].style.setProperty(
+			'--card-top',
+			event.clientY - chipPlayCardRef.current[idx].offsetHeight / 2 - 450 + 'px'
+		);
+		chipPlayCardRef.current[idx].style.setProperty('--card-opacity', 1);
+	}
+
+	function handleMouseLeave(idx) {
+		chipPlayCardRef.current[idx].style.setProperty('--card-opacity', 0);
+	}
 
 	let {
 		average_entry_score,
@@ -105,18 +120,20 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 			<div className='dashboard-wrapper'>
 				<div className='dashboard'>
 					<div className='dashboard--gw'>
-						<div className='transfers'>
-							<p>Transfers Made:</p>
-							<span>{formatNumber(transfers_made)}</span>
-						</div>
-						<div className='score'>
-							<div>
-								<p>Average Score:</p>
-								<span>{average_entry_score}</span>
+						<div className='row'>
+							<div className='transfers'>
+								<p>Transfers Made:</p>
+								<span>{formatNumber(transfers_made)}</span>
 							</div>
-							<div>
-								<p>Highest Score:</p>
-								<span>{highest_score}</span>
+							<div className='score'>
+								<div>
+									<p>Average Score:</p>
+									<span>{average_entry_score}</span>
+								</div>
+								<div>
+									<p>Highest Score:</p>
+									<span>{highest_score}</span>
+								</div>
 							</div>
 						</div>
 						<div className='most-player'>
@@ -149,10 +166,13 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 							</div>
 						</div>
 						<div className='chip--wrapper'>
-							{chip_plays.map((chip: statsModule.ChipPlay) => (
+							{chip_plays.map((chip: statsModule.ChipPlay, index: number) => (
 								<div
-									className={`chip_play chip--${chip.chip_name}`}
 									key={chip.chip_name}
+									className={`chip_play chip--${chip.chip_name}`}
+									ref={(el) => (chipPlayCardRef.current[index] = el)}
+									onMouseMove={(e) => handleMouseMove(e, index)}
+									onMouseLeave={() => handleMouseLeave(index)}
 								>
 									<span className='chip--name' data-chip-name={chip.chip_name}>
 										{chip.chip_name}
@@ -170,6 +190,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 								<div className='card-top'>
 									{topElement?.map((el) => (
 										<PlayerName
+											key={el.id}
 											id={el.id}
 											firstName={el.first_name}
 											secondName={el.second_name}

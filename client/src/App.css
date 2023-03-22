@@ -106,9 +106,17 @@
 	position: relative;
 }
 
+.row {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 2rem;
+}
+
 .transfers {
 	width: 200px;
-	/* min-height: 100px; */
+	min-height: 100px;
 	height: 100%;
 	display: flex;
 	flex-direction: column;
@@ -144,18 +152,23 @@
 		display: grid;
 		place-items: center;
 	}
+
+	.row {
+		justify-content: center;
+		padding: 0;
+	}
+
 	.transfers {
 		min-height: 100px;
 	}
 }
 
 .score {
-	width: 100%;
 	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 2rem;
+	gap: 1rem;
 }
 
 .score div {
@@ -195,7 +208,7 @@
 .most-player {
 	width: 100%;
 	height: 100%;
-	padding: 1rem;
+	/* padding: 1rem; */
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -237,11 +250,20 @@
 	align-items: center;
 	justify-content: flex-end;
 	flex-wrap: wrap;
-	gap: 1rem;
-	padding-right: 1rem;
+	gap: 0.5rem;
+	padding-right: 2rem;
+}
+
+@media (max-width: 860px) {
+	.chip--wrapper {
+		justify-content: center;
+		padding-right: 0;
+	}
 }
 
 .chip_play {
+	--card-top: 0;
+	--card-opacity: 0;
 	width: 100px;
 	height: 100px;
 	display: flex;
@@ -252,6 +274,33 @@
 	border-radius: 0.5rem;
 	position: relative;
 	overflow: hidden;
+}
+
+.chip_play::after {
+	content: '';
+	width: 2px;
+	height: 50px;
+	position: absolute;
+	top: var(--card-top);
+	left: 0;
+	background: linear-gradient(transparent, #9a3bfb, transparent);
+	transition: top, opacity;
+	transition-duration: 600ms;
+	transition-timing-function: ease;
+	transform-origin: center center;
+	transform: translateY(-50%);
+	opacity: var(--card-opacity);
+}
+
+/* .chip_play:after {
+	top: var(--card-top);
+	opacity: var(--card-opacity);
+} */
+
+.chip_play:hover::after {
+	top: var(--card-top);
+	opacity: var(--card-opacity);
+	transition-delay: -0.05s;
 }
 
 .chip--name {
@@ -285,22 +334,6 @@
 	right: 0;
 	padding: 10px;
 	font-size: 1.25rem;
-}
-
-.chip--bboost {
-	border: 1px solid orangered;
-}
-
-.chip--freehit {
-	border: 1px solid greenyellow;
-}
-
-.chip--wildcard {
-	border: 1px solid lightblue;
-}
-
-.chip--3xc {
-	border: 1px solid sandybrown;
 }
 
 .player--info {
