@@ -441,6 +441,16 @@
 	color: #9a3bfb;
 } */
 
+.chart {
+	padding: 0 2rem;
+}
+
+@media (max-width: 860px) {
+	.chart {
+		padding: 0;
+	}
+}
+
 .app {
 	width: 100%;
 	height: 100%;
