@@ -198,9 +198,27 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 										isPlayerImageLoading={isPlayerImageLoading}
 										playerImage={playerImage}
 									/>
+									<p className='price'>
+										{/* {formatCurrency(currentRound?.[0].value)} */}
+										{formatCurrency(topElement?.[0].now_cost)}
+									</p>
 								</div>
 								<div className='divider'></div>
 								<div className='card-bottom'>
+									{topElement?.map((el) => (
+										<div
+											className='news'
+											style={{
+												display: !el.news ? 'none' : 'block',
+												color:
+													el.news.includes('75%') || el.news.includes('50%')
+														? 'orange'
+														: 'red',
+											}}
+										>
+											{el.news}
+										</div>
+									))}
 									<p>{formatCurrency(currentRound?.[0].value)}</p>
 									<p>Points: {top_element_info.points}</p>
 									<p>

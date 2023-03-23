@@ -387,6 +387,14 @@
 	z-index: 100;
 }
 
+.price {
+	height: 100%;
+	color: white;
+	opacity: 0.87;
+	z-index: 400;
+	font-size: 2rem;
+}
+
 .card-top--name {
 	display: flex;
 	flex-direction: column;
@@ -424,14 +432,23 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	position: relative;
 }
 
-.card-bottom div {
+/* .card-bottom div {
 	width: 80%;
 	height: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+} */
+
+.news {
+	width: 100%;
+	height: 2rem;
+	position: absolute;
+	top: 0;
+	font-weight: bold;
 }
 
 /* .card-bottom div span:nth-child(2) {
