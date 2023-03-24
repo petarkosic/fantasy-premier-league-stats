@@ -207,6 +207,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 								<div className='card-bottom'>
 									{topElement?.map((el) => (
 										<div
+											key={el.id}
 											className='news'
 											style={{
 												display: !el.news ? 'none' : 'block',
@@ -219,19 +220,30 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 											{el.news}
 										</div>
 									))}
-									<p>{formatCurrency(currentRound?.[0].value)}</p>
-									<p>Points: {top_element_info.points}</p>
+									<p>
+										Gameweek Price: {formatCurrency(currentRound?.[0].value)}
+									</p>
+									<p>Gameweek Points: {topElement?.[0].event_points}</p>
+									<p>Total Points: {topElement?.[0].total_points}</p>
+									<p>Points Per Game: {topElement?.[0].points_per_game}</p>
+									<p>Goals Scored: {topElement?.[0].goals_scored}</p>
+									<p>Assists: {topElement?.[0].assists}</p>
+									<p>Clean Sheets: {topElement?.[0].clean_sheets}</p>
+
 									<p>
 										Selected by: {formatNumber(currentRound?.[0].selected)}{' '}
-										players
+										players ({topElement?.[0].selected_by_percent}%)
 									</p>
-									<p>
-										Transfers in: {formatNumber(currentRound?.[0].transfers_in)}
-									</p>
-									<p>
-										Transfers out:{' '}
-										{formatNumber(currentRound?.[0].transfers_out)}
-									</p>
+									<div className='player--transfers'>
+										<p>
+											Transfers in:{' '}
+											{formatNumber(currentRound?.[0].transfers_in)}
+										</p>
+										<p>
+											Transfers out:{' '}
+											{formatNumber(currentRound?.[0].transfers_out)}
+										</p>
+									</div>
 								</div>
 							</div>
 						</div>

@@ -451,6 +451,14 @@
 	font-weight: bold;
 }
 
+.player--transfers {
+	width: 100%;
+	padding: 0 1rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 /* .card-bottom div span:nth-child(2) {
 	color: #00ff87;
 } */
