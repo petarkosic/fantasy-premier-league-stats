@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getPlayerImage } from '../hooks/getPlayerImage';
+import { getPlayerImage } from '../services/playerStats';
 import { PlayerName } from './PlayerName';
 import { PlayerImage } from './PlayerImage';
 

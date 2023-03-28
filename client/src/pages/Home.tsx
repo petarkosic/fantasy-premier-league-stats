@@ -3,7 +3,7 @@ import { ChangeEvent, ReactNode, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PlayerCardGrid from '../components/PlayerCardGrid';
 import { Search } from '../components/Search';
-import { getStats } from '../hooks/getStats';
+import { getStats } from '../services/getStats';
 import { useDebounce } from '../hooks/useDebounce';
 
 export const Home = () => {

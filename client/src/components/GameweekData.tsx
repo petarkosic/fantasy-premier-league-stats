@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getPlayerImage } from '../hooks/getPlayerImage';
-import { getPlayerSummary } from '../hooks/getStats';
+import { getPlayerImage, getPlayerSummary } from '../services/playerStats';
+import { getTeamImage } from '../services/teamStats';
 import { formatCurrency, formatNumber } from '../utils/formatNumber';
 import { Chart } from './Chart';
 import { PlayerName } from './PlayerName';
@@ -71,6 +71,26 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 	let topElement = data?.elements.filter((el) => {
 		return el.id === top_element_info.id;
 	});
+
+	// get team image
+	const {
+		data: teamImage,
+		isLoading: isTeamImageLoading,
+		isError: isTeamImageError,
+	} = useQuery(
+		['teamImage', topElement?.[0].team_code],
+		() => getTeamImage(topElement?.[0].team_code),
+		{
+			refetchOnWindowFocus: false,
+		}
+	);
+
+	const cardRef = useRef();
+	let teamCode = topElement[0].team_code;
+
+	useEffect(() => {
+		cardRef?.current?.style?.setProperty('--bg-image', `url('${teamImage}')`);
+	}, [teamCode]);
 
 	// get player image
 	const {
@@ -184,8 +204,9 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 					</div>
 					<div className='player--info'>
 						<div className='card-wrapper'>
-							<div className='card'>
+							<div ref={cardRef} className='card'>
 								<div className='card-top'>
+									<div className='bg--image'></div>
 									{topElement?.map((el) => (
 										<PlayerName
 											key={el.id}
