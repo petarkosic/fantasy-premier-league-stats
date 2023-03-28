@@ -1,15 +1,4 @@
-import api from './../api/statsApi';
-
-export async function getStats() {
-	try {
-		const {
-			data: { stats },
-		} = await api.get('/stats');
-		return stats;
-	} catch (error) {
-		console.error(error);
-	}
-}
+import api from '../api/statsApi';
 
 export async function getPlayer(code: number) {
 	try {
@@ -28,6 +17,17 @@ export async function getPlayerSummary(id: number) {
 			data: { playerSummary },
 		} = await api.get(`/player-summary/${id}`);
 		return playerSummary;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+export async function getPlayerImage(code: number) {
+	try {
+		const {
+			data: { image },
+		} = await api.get(`/players/${code}`);
+		return image;
 	} catch (error) {
 		console.error(error);
 	}
