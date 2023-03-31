@@ -203,6 +203,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 						</div>
 					</div>
 					<div className='player--info'>
+						<h2 className='player-tag'>Player Of The Week</h2>
 						<div className='card-wrapper'>
 							<div ref={cardRef} className='card'>
 								<div className='card-top'>
