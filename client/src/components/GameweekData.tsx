@@ -242,37 +242,40 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 											{el.news}
 										</div>
 									))}
-									<p>
-										Gameweek Price: {formatCurrency(currentRound?.[0].value)}
-									</p>
-									<p>Gameweek Points: {topElement?.[0].event_points}</p>
-									<p>Total Points: {topElement?.[0].total_points}</p>
-									<p>Points Per Game: {topElement?.[0].points_per_game}</p>
-									<p>Goals Scored: {topElement?.[0].goals_scored}</p>
-									<p>Assists: {topElement?.[0].assists}</p>
-									<p>Clean Sheets: {topElement?.[0].clean_sheets}</p>
+									<div className='player--gw'>
+										<p>
+											Gameweek Price: {formatCurrency(currentRound?.[0].value)}
+										</p>
+										<p>Gameweek Points: {topElement?.[0].event_points}</p>
 
-									<p>
-										Selected by: {formatNumber(currentRound?.[0].selected)}{' '}
-										players ({topElement?.[0].selected_by_percent}%)
-									</p>
-									<div className='player--transfers'>
 										<p>
-											Transfers in:{' '}
-											{formatNumber(currentRound?.[0].transfers_in)}
+											Selected by: {formatNumber(currentRound?.[0].selected)}{' '}
+											players ({topElement?.[0].selected_by_percent}%)
 										</p>
-										<p>
-											Transfers out:{' '}
-											{formatNumber(currentRound?.[0].transfers_out)}
-										</p>
+										<div className='player--transfers'>
+											<p>
+												Transfers in:{' '}
+												{formatNumber(currentRound?.[0].transfers_in)}
+											</p>
+											<p>
+												Transfers out:{' '}
+												{formatNumber(currentRound?.[0].transfers_out)}
+											</p>
+										</div>
 									</div>
+
+									{/* <p>Total Points: {topElement?.[0].total_points}</p> */}
+									{/* <p>Points Per Game: {topElement?.[0].points_per_game}</p> */}
+									{/* <p>Goals Scored: {topElement?.[0].goals_scored}</p> */}
+									{/* <p>Assists: {topElement?.[0].assists}</p> */}
+									{/* <p>Clean Sheets: {topElement?.[0].clean_sheets}</p> */}
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<Chart playerSummary={playerSummary} />
+			{/* <Chart playerSummary={playerSummary} /> */}
 		</div>
 	);
 };
