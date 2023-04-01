@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getPlayerImage, getPlayerSummary } from '../services/playerStats';
 import { getTeamImage } from '../services/teamStats';
@@ -8,12 +8,14 @@ import { Chart } from './Chart';
 import { PlayerName } from './PlayerName';
 import { PlayerImage } from './PlayerImage';
 import MostPlayer from './MostPlayer';
+import PlayerInfoModal from './PlayerInfoModal';
 
 type GameweekDataProps = {
 	selectGameweek: string | undefined;
 };
 
 export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const queryClient = useQueryClient();
 	const loading = queryClient.isFetching();
 
@@ -263,7 +265,15 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 											</p>
 										</div>
 									</div>
-
+									<div className='view-more-button'>
+										<button onClick={() => setIsModalOpen(true)}>
+											View More
+										</button>
+									</div>
+									<PlayerInfoModal
+										isModalOpen={isModalOpen}
+										close={() => setIsModalOpen(false)}
+									/>
 									{/* <p>Total Points: {topElement?.[0].total_points}</p> */}
 									{/* <p>Points Per Game: {topElement?.[0].points_per_game}</p> */}
 									{/* <p>Goals Scored: {topElement?.[0].goals_scored}</p> */}
