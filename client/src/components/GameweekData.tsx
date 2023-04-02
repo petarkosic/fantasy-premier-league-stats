@@ -270,10 +270,6 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 											View More
 										</button>
 									</div>
-									<PlayerInfoModal
-										isModalOpen={isModalOpen}
-										close={() => setIsModalOpen(false)}
-									/>
 									{/* <p>Total Points: {topElement?.[0].total_points}</p> */}
 									{/* <p>Points Per Game: {topElement?.[0].points_per_game}</p> */}
 									{/* <p>Goals Scored: {topElement?.[0].goals_scored}</p> */}
@@ -284,6 +280,12 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 						</div>
 					</div>
 				</div>
+			</div>
+			<div className='player--modal--wrapper'>
+				<PlayerInfoModal
+					isModalOpen={isModalOpen}
+					close={() => setIsModalOpen(false)}
+				/>
 			</div>
 			{/* <Chart playerSummary={playerSummary} /> */}
 		</div>

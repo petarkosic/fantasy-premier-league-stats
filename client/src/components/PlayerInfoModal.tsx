@@ -7,7 +7,7 @@ const PlayerInfoModal = ({ isModalOpen, close }: PlayerInfoModalProps) => {
 	return (
 		<div>
 			{isModalOpen && (
-				<div>
+				<div className='player--modal'>
 					<p>show modal</p>
 					<button onClick={close}>close modal</button>
 				</div>
