@@ -270,24 +270,27 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 											View More
 										</button>
 									</div>
-									{/* <p>Total Points: {topElement?.[0].total_points}</p> */}
-									{/* <p>Points Per Game: {topElement?.[0].points_per_game}</p> */}
-									{/* <p>Goals Scored: {topElement?.[0].goals_scored}</p> */}
-									{/* <p>Assists: {topElement?.[0].assists}</p> */}
-									{/* <p>Clean Sheets: {topElement?.[0].clean_sheets}</p> */}
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div className='player--modal--wrapper'>
-				<PlayerInfoModal
-					isModalOpen={isModalOpen}
-					close={() => setIsModalOpen(false)}
-				/>
-			</div>
-			{/* <Chart playerSummary={playerSummary} /> */}
+			{isModalOpen && (
+				<div className='player--modal--wrapper'>
+					<PlayerInfoModal
+						isModalOpen={isModalOpen}
+						close={() => setIsModalOpen(false)}
+					>
+						<p>Total Points: {topElement?.[0].total_points}</p>
+						<p>Points Per Game: {topElement?.[0].points_per_game}</p>
+						<p>Goals Scored: {topElement?.[0].goals_scored}</p>
+						<p>Assists: {topElement?.[0].assists}</p>
+						<p>Clean Sheets: {topElement?.[0].clean_sheets}</p>
+						<Chart playerSummary={playerSummary} />
+					</PlayerInfoModal>
+				</div>
+			)}
 		</div>
 	);
 };

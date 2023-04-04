@@ -1,14 +1,19 @@
 type PlayerInfoModalProps = {
 	isModalOpen: boolean;
 	close: () => void;
+	children: React.ReactNode;
 };
 
-const PlayerInfoModal = ({ isModalOpen, close }: PlayerInfoModalProps) => {
+const PlayerInfoModal = ({
+	isModalOpen,
+	close,
+	children,
+}: PlayerInfoModalProps) => {
 	return (
 		<div>
 			{isModalOpen && (
 				<div className='player--modal'>
-					<p>show modal</p>
+					{children}
 					<button onClick={close}>close modal</button>
 				</div>
 			)}
