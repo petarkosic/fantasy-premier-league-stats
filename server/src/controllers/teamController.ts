@@ -12,7 +12,6 @@ export const getTeamImage = async (
 	next: NextFunction
 ) => {
 	const { code } = req.params;
-	console.log(code);
 
 	try {
 		const response = await axios.get(

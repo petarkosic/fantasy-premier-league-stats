@@ -1,14 +1,22 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 
 type PlayerImageProps = {
-	isPlayerImageLoading: boolean;
-	playerImage: string;
+	playerImage: any;
+	topElement: any;
 };
 
 export const PlayerImage = ({
-	isPlayerImageLoading,
 	playerImage,
-}: PlayerImageProps) => {
+	topElement,
+}: Partial<PlayerImageProps>) => {
+	const queryClient = useQueryClient();
+
+	const image = queryClient.getQueryData([
+		'player-image',
+		topElement?.[0].code,
+	]);
+
 	return (
 		<motion.div
 			initial={{ y: 150, opacity: 0, scale: 0.5 }}
@@ -16,11 +24,7 @@ export const PlayerImage = ({
 			transition={{ duration: 0.2 }}
 			className='card-top--image'
 		>
-			{isPlayerImageLoading ? (
-				<img src={'./../assets/transparent.png'} alt='' />
-			) : (
-				<img src={playerImage} alt='player image' />
-			)}
+			<img src={playerImage ? playerImage : image} alt='player image' />
 		</motion.div>
 	);
 };

@@ -19,9 +19,9 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 	const queryClient = useQueryClient();
 	const loading = queryClient.isFetching();
 
-	const data: statsModule.RootObject | undefined = queryClient.getQueryData({
-		stats: 'stats',
-	});
+	const data: statsModule.RootObject | undefined = queryClient.getQueryData([
+		'stats',
+	]);
 
 	let currentGameweek: statsModule.Event | undefined = data?.events?.filter(
 		(ev: statsModule.Event) => {
@@ -31,7 +31,10 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 
 	const chipPlayCardRef = useRef([]);
 
-	function handleMouseMove(event, idx) {
+	function handleMouseMove(
+		event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+		idx: number
+	) {
 		chipPlayCardRef.current[idx].style.setProperty(
 			'--card-top',
 			event.clientY - chipPlayCardRef.current[idx].offsetHeight / 2 - 450 + 'px'
@@ -39,7 +42,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		chipPlayCardRef.current[idx].style.setProperty('--card-opacity', 1);
 	}
 
-	function handleMouseLeave(idx) {
+	function handleMouseLeave(idx: number) {
 		chipPlayCardRef.current[idx].style.setProperty('--card-opacity', 0);
 	}
 
@@ -104,7 +107,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		['player-image', topElement?.[0].code],
 		() => getPlayerImage(topElement?.[0].code as number),
 		{
-			refetchOnWindowFocus: false,
+			refetchOnWindowFocus: true,
 		}
 	);
 
@@ -118,7 +121,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		refetchOnWindowFocus: false,
 	});
 
-	if (isLoading || isPlayerImageLoading) {
+	if (isLoading || isPlayerImageLoading || isTeamImageLoading) {
 		return <div>Loading....</div>;
 	}
 
@@ -163,26 +166,26 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 							<MostPlayer
 								className='most selected'
 								label='Most Selected:'
-								firstName={mostSelected?.[0].first_name}
-								secondName={mostSelected?.[0].second_name}
+								firstName={mostSelected?.[0].first_name || ''}
+								secondName={mostSelected?.[0].second_name || ''}
 							/>
 							<MostPlayer
 								className='most captained'
 								label='Most Captained:'
-								firstName={mostCaptained?.[0].first_name}
-								secondName={mostCaptained?.[0].second_name}
+								firstName={mostCaptained?.[0].first_name || ''}
+								secondName={mostCaptained?.[0].second_name || ''}
 							/>
 							<MostPlayer
 								className='most vice-captained'
 								label='Most Vice Captained:'
-								firstName={mostViceCaptained?.[0].first_name}
-								secondName={mostViceCaptained?.[0].second_name}
+								firstName={mostViceCaptained?.[0].first_name || ''}
+								secondName={mostViceCaptained?.[0].second_name || ''}
 							/>
 							<MostPlayer
 								className='most transferred'
 								label='Most Transferred:'
-								firstName={mostTransferedIn?.[0].first_name}
-								secondName={mostTransferedIn?.[0].second_name}
+								firstName={mostTransferedIn?.[0].first_name || ''}
+								secondName={mostTransferedIn?.[0].second_name || ''}
 							/>
 						</div>
 						<div className='chip--wrapper'>
@@ -218,10 +221,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 											secondName={el.second_name}
 										/>
 									))}
-									<PlayerImage
-										isPlayerImageLoading={isPlayerImageLoading}
-										playerImage={playerImage}
-									/>
+									<PlayerImage topElement={topElement} />
 									<p className='price'>
 										{/* {formatCurrency(currentRound?.[0].value)} */}
 										{formatCurrency(topElement?.[0].now_cost)}
@@ -281,12 +281,8 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 					<PlayerInfoModal
 						isModalOpen={isModalOpen}
 						close={() => setIsModalOpen(false)}
+						topElement={topElement}
 					>
-						<p>Total Points: {topElement?.[0].total_points}</p>
-						<p>Points Per Game: {topElement?.[0].points_per_game}</p>
-						<p>Goals Scored: {topElement?.[0].goals_scored}</p>
-						<p>Assists: {topElement?.[0].assists}</p>
-						<p>Clean Sheets: {topElement?.[0].clean_sheets}</p>
 						<Chart playerSummary={playerSummary} />
 					</PlayerInfoModal>
 				</div>
