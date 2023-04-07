@@ -19,26 +19,37 @@ const PlayerInfoModal = ({
 		<div>
 			{isModalOpen && (
 				<div className='player--modal'>
-					<div className='bg--image'></div>
-					{topElement?.map((el: any) => (
-						<PlayerName
-							key={el.id}
-							id={el.id}
-							firstName={el.first_name}
-							secondName={el.second_name}
-						/>
-					))}
-					<PlayerImage topElement={topElement} />
-					<p className='price'>
-						{/* {formatCurrency(currentRound?.[0].value)} */}
-						{formatCurrency(topElement?.[0].now_cost)}
-					</p>
-					{children}
-					<p>Total Points: {topElement?.[0].total_points}</p>
-					<p>Points Per Game: {topElement?.[0].points_per_game}</p>
-					<p>Goals Scored: {topElement?.[0].goals_scored}</p>
-					<p>Assists: {topElement?.[0].assists}</p>
-					<p>Clean Sheets: {topElement?.[0].clean_sheets}</p>
+					{/* <div className='bg--image'></div> */}
+					<div className='player--modal--summary'>
+						<div className='modal--banner'>
+							<div className='modalimage'>
+								<PlayerImage topElement={topElement} />
+							</div>
+							<div className='modal--player--name'>
+								{topElement?.map((el: any) => (
+									<PlayerName
+										key={el.id}
+										id={el.id}
+										firstName={el.first_name}
+										secondName={el.second_name}
+									/>
+								))}
+							</div>
+						</div>
+						<div className='player--modal--info'>
+							<p className='price'>
+								{/* {formatCurrency(currentRound?.[0].value)} */}
+								{formatCurrency(topElement?.[0].now_cost)}
+							</p>
+							<p>Total Points: {topElement?.[0].total_points}</p>
+							<p>Points Per Game: {topElement?.[0].points_per_game}</p>
+							<p>Goals Scored: {topElement?.[0].goals_scored}</p>
+							<p>Assists: {topElement?.[0].assists}</p>
+							<p>Clean Sheets: {topElement?.[0].clean_sheets}</p>
+						</div>
+					</div>
+					<div className='player--modal--chart'>{/* {children} */}</div>
+
 					<button onClick={close}>close modal</button>
 				</div>
 			)}
