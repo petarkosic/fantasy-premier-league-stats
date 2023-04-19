@@ -91,11 +91,10 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 	);
 
 	const cardRef = useRef();
-	let teamCode = topElement[0].team_code;
 
 	useEffect(() => {
 		cardRef?.current?.style?.setProperty('--bg-image', `url('${teamImage}')`);
-	}, [teamCode]);
+	});
 
 	// get player image
 	const {
@@ -107,7 +106,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		['player-image', topElement?.[0].code],
 		() => getPlayerImage(topElement?.[0].code as number),
 		{
-			refetchOnWindowFocus: true,
+			refetchOnWindowFocus: false,
 		}
 	);
 
@@ -248,8 +247,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 										<p>
 											Gameweek Price: {formatCurrency(currentRound?.[0].value)}
 										</p>
-										<p>Gameweek Points: {topElement?.[0].event_points}</p>
-
+										<p>Gameweek Points: {top_element_info?.points}</p>
 										<p>
 											Selected by: {formatNumber(currentRound?.[0].selected)}{' '}
 											players ({topElement?.[0].selected_by_percent}%)
@@ -282,6 +280,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 						isModalOpen={isModalOpen}
 						close={() => setIsModalOpen(false)}
 						topElement={topElement}
+						elementTypes={data?.element_types}
 					>
 						<Chart playerSummary={playerSummary} />
 					</PlayerInfoModal>
