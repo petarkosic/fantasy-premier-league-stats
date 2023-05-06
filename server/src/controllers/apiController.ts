@@ -88,3 +88,35 @@ export const getPlayerSummary = async (
 		console.error(error.message);
 	}
 };
+
+export const getPlayerDataId = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	const { webName, secondName } = req.body.data;
+
+	try {
+		const response = await axios.request({
+			method: 'GET',
+			url: process.env.RapidAPI_Url,
+			params: {
+				query: `${webName} ${secondName}`,
+				group: 'players',
+			},
+			headers: {
+				'X-RapidAPI-Key': process.env.X_RapidAPI_Key,
+				'X-RapidAPI-Host': process.env.X_RapidAPI_Host,
+				'Content-Type': 'application/json',
+				'accept-encoding': '*',
+			},
+		});
+
+		res.status(200).json({
+			playerDataId: response.data.data[0].id,
+		});
+	} catch (err) {
+		const error = err as Error;
+		console.error(error.message);
+	}
+};

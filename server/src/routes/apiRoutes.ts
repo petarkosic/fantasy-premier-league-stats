@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
 	callApi,
 	getPlayer,
+	getPlayerDataId,
 	getPlayerImage,
 	getPlayerSummary,
 } from '../controllers/apiController';
@@ -14,5 +15,6 @@ router.get('/player/:code', getPlayer);
 router.get('/player-summary/:id', getPlayerSummary);
 router.get('/players/:code', getPlayerImage);
 router.get('/team/:code', getTeamImage);
+router.post('/player-heatmap', getPlayerDataId);
 
 export default router;
