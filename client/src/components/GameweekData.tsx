@@ -1,7 +1,11 @@
 // @ts-nocheck
 import { useEffect, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getPlayerImage, getPlayerSummary } from '../services/playerStats';
+import {
+	getPlayerDataId,
+	getPlayerImage,
+	getPlayerSummary,
+} from '../services/playerStats';
 import { getTeamImage } from '../services/teamStats';
 import { formatCurrency, formatNumber } from '../utils/formatNumber';
 import { Chart } from './Chart';
@@ -119,6 +123,17 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 	} = useQuery(['player-summary', playerId], () => getPlayerSummary(playerId), {
 		refetchOnWindowFocus: false,
 	});
+
+	let topElementWebName = topElement?.[0].web_name;
+	let topElementSecondName = topElement?.[0].second_name;
+
+	const { data: playerDataId } = useQuery(
+		['player-id', topElementWebName, topElementSecondName],
+		() => getPlayerDataId(topElementWebName, topElementSecondName),
+		{
+			refetchOnWindowFocus: false,
+		}
+	);
 
 	if (isLoading || isPlayerImageLoading || isTeamImageLoading) {
 		return <div>Loading....</div>;

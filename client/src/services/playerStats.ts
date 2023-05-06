@@ -32,3 +32,20 @@ export async function getPlayerImage(code: number) {
 		console.error(error);
 	}
 }
+
+export async function getPlayerDataId(webName: string, secondName: string) {
+	try {
+		const {
+			data: { playerDataId },
+		} = await api.post(`/player-heatmap`, {
+			data: {
+				webName: JSON.stringify(webName),
+				secondName: JSON.stringify(secondName),
+			},
+		});
+
+		return playerDataId;
+	} catch (error) {
+		console.error(error);
+	}
+}
