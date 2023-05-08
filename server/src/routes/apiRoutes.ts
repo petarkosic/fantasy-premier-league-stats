@@ -3,6 +3,7 @@ import {
 	callApi,
 	getPlayer,
 	getPlayerDataId,
+	getPlayerHeatmap,
 	getPlayerImage,
 	getPlayerSummary,
 } from '../controllers/apiController';
@@ -15,6 +16,7 @@ router.get('/player/:code', getPlayer);
 router.get('/player-summary/:id', getPlayerSummary);
 router.get('/players/:code', getPlayerImage);
 router.get('/team/:code', getTeamImage);
-router.post('/player-heatmap', getPlayerDataId);
+router.post('/player-data', getPlayerDataId);
+router.post('/player-heatmap', getPlayerHeatmap);
 
 export default router;

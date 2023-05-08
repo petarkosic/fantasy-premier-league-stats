@@ -37,7 +37,7 @@ export async function getPlayerDataId(webName: string, secondName: string) {
 	try {
 		const {
 			data: { playerDataId },
-		} = await api.post(`/player-heatmap`, {
+		} = await api.post(`/player-data`, {
 			data: {
 				webName: JSON.stringify(webName),
 				secondName: JSON.stringify(secondName),
