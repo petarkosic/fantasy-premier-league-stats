@@ -49,3 +49,19 @@ export async function getPlayerDataId(webName: string, secondName: string) {
 		console.error(error);
 	}
 }
+
+export async function getPlayerHeatmapData(playerId: number) {
+	try {
+		const {
+			data: { playerDataHeatmapPoints },
+		} = await api.post(`/player-heatmap`, {
+			data: {
+				playerId: playerId,
+			},
+		});
+
+		return playerDataHeatmapPoints;
+	} catch (error) {
+		console.error(error);
+	}
+}

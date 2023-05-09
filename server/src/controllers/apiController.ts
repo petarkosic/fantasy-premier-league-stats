@@ -126,18 +126,18 @@ export const getPlayerHeatmap = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	// const { playerId } = req.body.data;
-	// let uniqueTournamentId: number = 17;
-	// let seasonId: number = 41886;
+	const { playerId } = req.body.data;
+	let uniqueTournamentId: number = 17;
+	let seasonId: number = 41886;
 
 	try {
 		const response = await axios.request({
 			method: 'GET',
 			url: process.env.RapidAPI_Heatmap_Url,
 			params: {
-				player_id: 839956,
-				unique_tournament_id: 17,
-				seasons_id: 41886,
+				player_id: playerId,
+				unique_tournament_id: uniqueTournamentId,
+				seasons_id: seasonId,
 			},
 			headers: {
 				'X-RapidAPI-Key': process.env.X_RapidAPI_Key,
@@ -146,10 +146,9 @@ export const getPlayerHeatmap = async (
 				'accept-encoding': '*',
 			},
 		});
-		console.log(response.data);
 
 		res.status(200).json({
-			playerDataId: response.data.data,
+			playerDataHeatmapPoints: response.data.data.points,
 		});
 	} catch (err) {
 		const error = err as Error;

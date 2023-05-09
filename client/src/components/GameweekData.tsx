@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
 	getPlayerDataId,
+	getPlayerHeatmapData,
 	getPlayerImage,
 	getPlayerSummary,
 } from '../services/playerStats';
@@ -132,6 +133,15 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		() => getPlayerDataId(topElementWebName, topElementSecondName),
 		{
 			refetchOnWindowFocus: false,
+		}
+	);
+
+	const { data: playerDataHeatmapPoints } = useQuery(
+		['player-heatmap', playerDataId],
+		() => getPlayerHeatmapData(playerDataId),
+		{
+			refetchOnWindowFocus: false,
+			enabled: !!playerDataId,
 		}
 	);
 
@@ -296,6 +306,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 						close={() => setIsModalOpen(false)}
 						topElement={topElement}
 						elementTypes={data?.element_types}
+						playerDataHeatmapPoints={playerDataHeatmapPoints}
 					>
 						<Chart playerSummary={playerSummary} />
 					</PlayerInfoModal>

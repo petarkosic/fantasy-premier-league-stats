@@ -707,6 +707,10 @@ h3 {
 	color: #9a3bfb;
 } */
 
+.player--modal--heatmap canvas {
+	transform: rotateX(180deg);
+}
+
 .chart {
 	padding: 0 2rem;
 }
