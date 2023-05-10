@@ -707,10 +707,19 @@ h3 {
 	color: #9a3bfb;
 } */
 
+.chart--heatmap {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
 .heatmap--wrapper {
 	position: relative;
 	width: 100%;
 	padding-top: min(232px, 62.605% + 20px);
+	margin-right: 20px;
 }
 
 .heatmap--container {
@@ -719,13 +728,11 @@ h3 {
 	align-items: center;
 	justify-content: center;
 	background-color: #446c46;
-	width: 300px;
 	position: absolute;
-	top: 0;
+	top: 50%;
 	left: 50%;
-	transform: translate(-50%, 0);
-	padding-top: 8px;
-	padding-bottom: 8px;
+	transform: translate(-50%, -50%);
+	padding: 8px 10px;
 	border-radius: 16px;
 }
 
@@ -745,7 +752,7 @@ h3 {
 }
 
 .chart {
-	padding: 0 2rem;
+	width: 100%;
 }
 
 @media (max-width: 860px) {
