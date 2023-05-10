@@ -141,7 +141,6 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		() => getPlayerHeatmapData(playerDataId),
 		{
 			refetchOnWindowFocus: false,
-			enabled: !!playerDataId,
 		}
 	);
 

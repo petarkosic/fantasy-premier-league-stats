@@ -707,6 +707,39 @@ h3 {
 	color: #9a3bfb;
 } */
 
+.heatmap--wrapper {
+	position: relative;
+	width: 100%;
+	padding-top: min(232px, 62.605% + 20px);
+}
+
+.heatmap--container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: #446c46;
+	width: 300px;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%, 0);
+	padding-top: 8px;
+	padding-bottom: 8px;
+	border-radius: 16px;
+}
+
+.heatmap--container > svg {
+	margin-bottom: 8px;
+}
+
+.player--modal--heatmap {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 26px;
+}
+
 .player--modal--heatmap canvas {
 	transform: rotateX(180deg);
 }
