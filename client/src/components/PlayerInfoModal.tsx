@@ -62,7 +62,7 @@ const PlayerInfoModal = ({
 				context.moveTo(firstPoint?.x * xRatio, firstPoint?.y * yRatio);
 				for (let i = 0; i < playerDataHeatmapPoints?.length - 1; i++) {
 					const { x, y, count } = playerDataHeatmapPoints?.[i];
-					context.fillRect(x * 2.56, y * 1.56, 1, 1);
+					context.fillRect(x * 2.5, y * 1.5, 1, 1);
 					context.fillStyle = count > 1 ? 'red' : 'yellow';
 				}
 				context.stroke();
@@ -102,7 +102,7 @@ const PlayerInfoModal = ({
 									<h3>Price</h3>
 									<div>{formatCurrency(topElement?.[0].now_cost)}</div>
 									<div className='rank-title'>
-										<strong>{topElement?.[0].selected_rank_type}</strong> of{' '}
+										<strong>{topElement?.[0].selected_rank_type}</strong> of,{' '}
 										{elementType?.element_count}
 									</div>
 								</li>

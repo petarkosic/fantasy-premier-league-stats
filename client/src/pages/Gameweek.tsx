@@ -14,7 +14,7 @@ export const Gameweek = () => {
 		return ev.is_current;
 	});
 	const [selectGameweek, setSelectGameweek] = useState(
-		currentGameweek?.[0].name
+		currentGameweek?.[0]?.name
 	);
 
 	return (

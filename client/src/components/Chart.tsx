@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import {
 	AreaChart,
 	CartesianGrid,
@@ -13,10 +14,38 @@ type ChartProps = {
 };
 
 export const Chart = ({ playerSummary }: ChartProps) => {
+	const [chartWidth, setChartWidth] = useState<number>(730);
+	const chartRef = useRef<HTMLDivElement | null>(null);
+
+	const updateChartWidth = () => {
+		if (chartRef.current) {
+			const parentWidth = chartRef?.current?.clientWidth;
+			const screenWidth = window.innerWidth;
+
+			if (screenWidth <= 500) {
+				setChartWidth(parentWidth * 0.9);
+			} else if (screenWidth <= 900) {
+				setChartWidth(screenWidth * 0.9);
+			} else {
+				setChartWidth(730);
+			}
+		}
+	};
+
+	useEffect(() => {
+		updateChartWidth();
+
+		window.addEventListener('resize', updateChartWidth);
+
+		return () => {
+			window.removeEventListener('resize', updateChartWidth);
+		};
+	}, []);
+
 	return (
-		<div className='chart'>
+		<div className='chart' ref={chartRef}>
 			<AreaChart
-				width={730}
+				width={chartWidth}
 				height={280}
 				data={playerSummary?.history}
 				margin={{ top: 10, right: 30, left: 0, bottom: 0 }}

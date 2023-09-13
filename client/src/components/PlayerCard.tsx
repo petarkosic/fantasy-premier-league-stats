@@ -2,6 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import { getPlayerImage } from '../services/playerStats';
 import { PlayerName } from './PlayerName';
 import { PlayerImage } from './PlayerImage';
+import { getTeamImage } from '../services/teamStats';
+import { useEffect, useRef } from 'react';
+import transparentImage from '../assets/transparent.png';
 
 type PlayerCardProps = {
 	data: statsModule.Element;
@@ -18,50 +21,69 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 		isError: isPlayerError,
 	} = useQuery(['player-image', code], () => getPlayerImage(code));
 
+	// get team image
+	const {
+		data: teamImage,
+		isLoading: isTeamImageLoading,
+		isError: isTeamImageError,
+	} = useQuery(
+		['teamImage', data?.team_code],
+		() => getTeamImage(data?.team_code),
+		{
+			refetchOnWindowFocus: false,
+		}
+	);
+
+	const cardRef = useRef<HTMLDivElement | null>(null);
+
+	useEffect(() => {
+		cardRef?.current?.style?.setProperty('--bg-image', `url('${teamImage}')`);
+	});
+
 	return (
 		<div className='card-wrapper'>
-			<div className='card'>
+			<div ref={cardRef} className='card'>
 				<div className='card-top'>
 					<PlayerName
 						id={data.id}
 						firstName={data.first_name}
 						secondName={data.second_name}
 					/>
-					<PlayerImage playerImage={playerImage} />
+					{isPlayerImageLoading ? (
+						<PlayerImage playerImage={transparentImage} />
+					) : (
+						<PlayerImage playerImage={playerImage} />
+					)}
 				</div>
 				<hr className='divider' />
-				<div className='card-bottom'>
-					<div>
-						<span>Selected By Percent:</span>
-						<span>{data.selected_by_percent} %</span>
+				<div className='home-card-bottom'>
+					<div className='left'>
+						<div>
+							<p>Goals: {data.goals_scored}</p>
+						</div>
+						<div>
+							<p>Assists: {data.assists}</p>
+						</div>
+						<div>
+							<p>Expected Goals: {data.expected_goals}</p>
+						</div>
+						<div>
+							<p>Selected By: {data.selected_by_percent} %</p>
+						</div>
 					</div>
-					<div>
-						<span>Goals:</span>
-						<span>{data.goals_scored}</span>
-					</div>
-					<div>
-						<span>Assists:</span>
-						<span>{data.assists}</span>
-					</div>
-					<div>
-						<span>Bonus:</span>
-						<span>{data.bonus}</span>
-					</div>
-					<div>
-						<span>Form:</span>
-						<span>{data.form}</span>
-					</div>
-					<div>
-						<span>Expected Goals:</span>
-						<span>{data.expected_goals}</span>
-					</div>
-					<div>
-						<span>Minutes Played:</span>
-						<span>{data.minutes}</span>
-					</div>
-					<div>
-						<span>Influence:</span>
-						<span>{data.influence}</span>
+					<div className='right'>
+						<div>
+							<p>Total Points: {data?.total_points}</p>
+						</div>
+						<div>
+							<p>Bonus: {data.bonus}</p>
+						</div>
+						<div>
+							<p>Form: {data.form}</p>
+						</div>
+						<div>
+							<p>Influence: {data.influence}</p>
+						</div>
 					</div>
 				</div>
 			</div>

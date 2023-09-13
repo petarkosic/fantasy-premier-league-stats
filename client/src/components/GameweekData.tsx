@@ -95,7 +95,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		}
 	);
 
-	const cardRef = useRef();
+	const cardRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {
 		cardRef?.current?.style?.setProperty('--bg-image', `url('${teamImage}')`);

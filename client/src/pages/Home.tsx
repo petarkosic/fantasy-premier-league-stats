@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ChangeEvent, ReactNode, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PlayerCardGrid from '../components/PlayerCardGrid';
@@ -8,10 +8,6 @@ import { useDebounce } from '../hooks/useDebounce';
 
 export const Home = () => {
 	const [playerName, setPlayerName] = useState<string>('');
-	// const queryClient = useQueryClient();
-	// const data: statsModule.RootObject | undefined = queryClient.getQueryData({
-	// 	stats: 'stats',
-	// });
 	let debouncedPlayerName = useDebounce<string>(playerName, 1000);
 
 	const { data, error, isLoading, isError } = useQuery(['stats'], getStats, {
@@ -19,6 +15,10 @@ export const Home = () => {
 	});
 
 	let player = useMemo(() => {
+		if (!playerName) {
+			return null;
+		}
+
 		return data?.elements?.filter(
 			(el: statsModule.Element) =>
 				el.second_name.toLowerCase().includes(playerName.toLowerCase()) ||
@@ -51,6 +51,9 @@ export const Home = () => {
 				playerName={playerName}
 				handleSearchPlayerName={handleSearchPlayerName}
 			/>
+			{player && player.length === 0 ? (
+				<div className='no-player'>There is no player with that name...</div>
+			) : null}
 			<PlayerCardGrid data={playerName ? player : null} />
 		</>
 	);
