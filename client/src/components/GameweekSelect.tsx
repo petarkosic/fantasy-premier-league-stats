@@ -7,8 +7,6 @@ type GameweekSelectProps = {
 	setSelectGameweek: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
-const NOT_PLAYED_GAMEWEEKS = ['Gameweek 7'];
-
 export const GameweekSelect = ({
 	data,
 	selectGameweek,
@@ -26,11 +24,11 @@ export const GameweekSelect = ({
 				onChange={(e) => handleSelectGameweekChange(e)}
 				name='gameweek'
 			>
-				{data?.events?.map((val: statsModule.Event) =>
-					(val.finished || val.is_current) &&
-					!NOT_PLAYED_GAMEWEEKS.includes(val.name) ? (
-						<option key={val.id}>{val.name}</option>
-					) : null
+				{data?.events?.map(
+					(val: statsModule.Event) =>
+						(val.finished || val.is_current) && (
+							<option key={val.id}>{val.name}</option>
+						)
 				)}
 			</select>
 		</div>
