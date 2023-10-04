@@ -576,13 +576,22 @@
 	height: 100%;
 	padding: 0 1rem;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	gap: 1rem;
 }
 
-.home-card-bottom .left,
-.home-card-bottom .right {
+.bottom-data {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.bottom-data .left,
+.bottom-data .right {
 	width: 100%;
 	height: 100%;
 	display: flex;
@@ -590,6 +599,10 @@
 	justify-content: center;
 	gap: 0.5rem;
 	text-align: left;
+}
+
+.home-card-bottom .view-more-button button {
+	z-index: 100;
 }
 
 .news {
@@ -633,11 +646,11 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	position: absolute;
+	position: fixed;
 	top: 0;
 	left: 0;
 	background: rgba(0, 0, 0, 0.7);
-	z-index: 100;
+	z-index: 1000;
 }
 
 .player--modal {
@@ -904,7 +917,7 @@ h3 {
 	width: 100%;
 	height: 100%;
 	position: absolute;
-	top: 26px;
+	top: 33px;
 }
 
 .player--modal--heatmap canvas {

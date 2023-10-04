@@ -1,10 +1,31 @@
-import { useQuery } from '@tanstack/react-query';
-import { getPlayerImage } from '../services/playerStats';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+	getPlayerDataId,
+	getPlayerHeatmapData,
+	getPlayerImage,
+	getPlayerSummary,
+} from '../services/playerStats';
 import { PlayerName } from './PlayerName';
 import { PlayerImage } from './PlayerImage';
 import { getTeamImage } from '../services/teamStats';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import transparentImage from '../assets/transparent.png';
+import PlayerInfoModal from './PlayerInfoModal';
+import { Chart } from './Chart';
+
+type ElementType = {
+	id: number;
+	plural_name: string;
+	plural_name_short: string;
+	singular_name: string;
+	singular_name_short: string;
+	squad_select: number;
+	squad_min_play: number;
+	squad_max_play: number;
+	ui_shirt_specific: true;
+	sub_positions_locked: number[] | null[];
+	element_count: number;
+};
 
 type PlayerCardProps = {
 	data: statsModule.Element;
@@ -12,6 +33,45 @@ type PlayerCardProps = {
 
 const PlayerCard = ({ data }: PlayerCardProps) => {
 	const code: number = data?.code;
+	const queryClient = useQueryClient();
+
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	const playerData: statsModule.RootObject | undefined =
+		queryClient.getQueryData(['stats']) as statsModule.RootObject;
+
+	let topElementWebName: string = data?.web_name;
+	let topElementSecondName: string = data?.second_name;
+
+	const { data: playerDataId } = useQuery(
+		['player-id', topElementWebName, topElementSecondName],
+		() => getPlayerDataId(topElementWebName, topElementSecondName),
+		{
+			refetchOnWindowFocus: false,
+		}
+	);
+
+	const { data: playerDataHeatmapPoints } = useQuery(
+		['player-heatmap', playerDataId],
+		() => getPlayerHeatmapData(playerDataId),
+		{
+			refetchOnWindowFocus: false,
+		}
+	);
+
+	let playerId = data.id;
+	let searchedPlayer = playerData?.elements.filter((el) => {
+		return el.id === playerId;
+	});
+
+	const {
+		data: playerSummary,
+		error: playerSummaryError,
+		isLoading: isPlayerSummaryImageLoading,
+		isError: isPlayerSummaryError,
+	} = useQuery(['player-summary', playerId], () => getPlayerSummary(playerId), {
+		refetchOnWindowFocus: false,
+	});
 
 	// get player image
 	const {
@@ -57,36 +117,54 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 				</div>
 				<hr className='divider' />
 				<div className='home-card-bottom'>
-					<div className='left'>
-						<div>
-							<p>Goals: {data.goals_scored}</p>
+					<div className='bottom-data'>
+						<div className='left'>
+							<div>
+								<p>Goals: {data.goals_scored}</p>
+							</div>
+							<div>
+								<p>Assists: {data.assists}</p>
+							</div>
+							<div>
+								<p>Expected Goals: {data.expected_goals}</p>
+							</div>
+							<div>
+								<p>Selected By: {data.selected_by_percent} %</p>
+							</div>
 						</div>
-						<div>
-							<p>Assists: {data.assists}</p>
-						</div>
-						<div>
-							<p>Expected Goals: {data.expected_goals}</p>
-						</div>
-						<div>
-							<p>Selected By: {data.selected_by_percent} %</p>
+						<div className='right'>
+							<div>
+								<p>Total Points: {data?.total_points}</p>
+							</div>
+							<div>
+								<p>Bonus: {data.bonus}</p>
+							</div>
+							<div>
+								<p>Form: {data.form}</p>
+							</div>
+							<div>
+								<p>Influence: {data.influence}</p>
+							</div>
 						</div>
 					</div>
-					<div className='right'>
-						<div>
-							<p>Total Points: {data?.total_points}</p>
-						</div>
-						<div>
-							<p>Bonus: {data.bonus}</p>
-						</div>
-						<div>
-							<p>Form: {data.form}</p>
-						</div>
-						<div>
-							<p>Influence: {data.influence}</p>
-						</div>
+					<div className='view-more-button'>
+						<button onClick={() => setIsModalOpen(true)}>View More</button>
 					</div>
 				</div>
 			</div>
+			{isModalOpen && (
+				<div className='player--modal--wrapper'>
+					<PlayerInfoModal
+						isModalOpen={isModalOpen}
+						close={() => setIsModalOpen(false)}
+						topElement={searchedPlayer}
+						elementTypes={playerData?.element_types as ElementType[]}
+						playerDataHeatmapPoints={playerDataHeatmapPoints}
+					>
+						<Chart playerSummary={playerSummary} />
+					</PlayerInfoModal>
+				</div>
+			)}
 		</div>
 	);
 };
