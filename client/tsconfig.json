@@ -16,8 +16,10 @@
 		"noEmit": true,
 		"jsx": "react-jsx",
 		"declaration": true,
-		"declarationDir": "types"
+		"declarationDir": "types",
+		"types": ["vitest/globals"]
 	},
-	"include": ["src"],
+	// "types": ["node", "jest", "@testing-library/jest-dom"],
+	"include": ["src", "vite.config.ts", "./setupTests.ts"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

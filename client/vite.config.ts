@@ -1,3 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/// <reference types="vitest" />
+/// <reference types="vite/client" />
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -12,4 +16,10 @@ export default defineConfig({
 		port: 3000, // you can replace this port with any port
 	},
 	plugins: [react()],
+	test: {
+		globals: true,
+		environment: 'jsdom',
+		setupFiles: ['./setupTests.ts'],
+		css: true,
+	},
 });
