@@ -1,3 +1,5 @@
+// @tsx React.tsx
+
 import { ChangeEvent } from 'react';
 
 type SearchProps = {

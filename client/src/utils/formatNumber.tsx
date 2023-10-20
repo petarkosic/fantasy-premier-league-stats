@@ -10,7 +10,7 @@ export function formatCurrency(num: number): string {
 		price = numString.split('').join('.');
 	} else {
 		let arr: string[] = numString.split('');
-		price = `${arr[0]}${arr[1]}.${2}`;
+		price = `${arr[0]}${arr[1]}.${arr[2]}`;
 	}
 
 	return `£${price}`;

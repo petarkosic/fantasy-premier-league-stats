@@ -1,3 +1,5 @@
+// @tsx React.tsx
+
 import { useEffect, useRef, useState } from 'react';
 import {
 	AreaChart,
@@ -43,7 +45,7 @@ export const Chart = ({ playerSummary }: ChartProps) => {
 	}, []);
 
 	return (
-		<div className='chart' ref={chartRef}>
+		<div data-testid='chart' className='chart' ref={chartRef}>
 			<AreaChart
 				width={chartWidth}
 				height={280}
