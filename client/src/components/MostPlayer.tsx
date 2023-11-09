@@ -12,7 +12,7 @@ const MostPlayer = ({
 	secondName,
 }: MostPlayerProps) => {
 	return (
-		<div className={className}>
+		<div data-testid='most-player' className={className}>
 			<p>{label}</p>
 			<span>
 				{firstName} {secondName}
