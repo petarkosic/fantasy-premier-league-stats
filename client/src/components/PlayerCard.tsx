@@ -117,6 +117,19 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 				</div>
 				<hr className='divider' />
 				<div className='home-card-bottom'>
+					<div
+						className='news'
+						style={{
+							display: !data.news ? 'none' : 'block',
+							color:
+								data.news.includes('75%') || data.news.includes('50%')
+									? 'orange'
+									: 'red',
+						}}
+					>
+						{data.news}
+					</div>
+
 					<div className='bottom-data'>
 						<div className='left'>
 							<div>

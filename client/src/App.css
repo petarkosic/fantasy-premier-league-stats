@@ -580,6 +580,11 @@
 	align-items: center;
 	justify-content: center;
 	gap: 1rem;
+	position: relative;
+}
+
+.home-card-bottom .news {
+	top: -0.5em;
 }
 
 .bottom-data {
