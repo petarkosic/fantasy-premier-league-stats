@@ -24,5 +24,38 @@ services:
       - ./client:/app
     networks:
       - fpl-net
+  prometheus:
+    container_name: fpl-prometheus
+    image: prom/prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - prometheus-data:/prometheus
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - server
+    networks:
+      - fpl-net
+
+  grafana:
+    container_name: fpl-grafana
+    image: grafana/grafana
+    ports:
+      - '4000:3000'
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./config/grafana/datasource.yml:/etc/grafana/provisioning/datasources/prometheus-datasource.yml
+    depends_on:
+      - prometheus
+    networks:
+      - fpl-net
+
 networks:
   fpl-net:
+
+volumes:
+  prometheus-data:
+  grafana-data:
