@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { Request, Response, NextFunction } from 'express';
 import axios from 'axios';
 import MonitoringService from '../services/MonitoringService';
@@ -42,17 +41,30 @@ export const getPlayerImage = async (
 	next: NextFunction
 ) => {
 	const { code } = req.params;
+	const startTime = process.hrtime();
 
 	try {
 		const response = await axios.get(
 			`https://resources.premierleague.com/premierleague/photos/players/110x140/p${code}.png`
 		);
+
+		MonitoringService.incrementSuccessfulRequests();
+
 		res.status(200).json({
 			image: response.config.url,
 		});
 	} catch (err) {
+		MonitoringService.incrementFailedRequests();
 		const error = err as Error;
 		console.error(error.message);
+	} finally {
+		const endTime = process.hrtime(startTime);
+		const durationInSeconds = endTime[0] + endTime[1] / 1e9;
+		MonitoringService.recordRequestDuration(durationInSeconds);
+		MonitoringService.recordRouteRequestDuration(
+			`/player-image`,
+			durationInSeconds
+		);
 	}
 };
 
@@ -62,21 +74,30 @@ export const getPlayer = async (
 	next: NextFunction
 ) => {
 	const { code } = req.params;
+	const startTime = process.hrtime();
 
 	try {
 		const response = await axios.get(
 			'https://fantasy.premierleague.com/api/bootstrap-static/'
 		);
 		let filteredPlayer = response.data.elements.filter(
-			(el) => el.code === parseInt(code)
+			(el: { code: number }) => el.code === parseInt(code)
 		);
+
+		MonitoringService.incrementSuccessfulRequests();
 
 		res.status(200).json({
 			player: filteredPlayer,
 		});
 	} catch (err) {
+		MonitoringService.incrementFailedRequests();
 		const error = err as Error;
 		console.error(error.message);
+	} finally {
+		const endTime = process.hrtime(startTime);
+		const durationInSeconds = endTime[0] + endTime[1] / 1e9;
+		MonitoringService.recordRequestDuration(durationInSeconds);
+		MonitoringService.recordRouteRequestDuration(`/player`, durationInSeconds);
 	}
 };
 
@@ -86,18 +107,30 @@ export const getPlayerSummary = async (
 	next: NextFunction
 ) => {
 	const { id } = req.params;
+	const startTime = process.hrtime();
 
 	try {
 		const response = await axios.get(
 			`https://fantasy.premierleague.com/api/element-summary/${parseInt(id)}/`
 		);
 
+		MonitoringService.incrementSuccessfulRequests();
+
 		res.status(200).json({
 			playerSummary: response.data,
 		});
 	} catch (err) {
+		MonitoringService.incrementFailedRequests();
 		const error = err as Error;
 		console.error(error.message);
+	} finally {
+		const endTime = process.hrtime(startTime);
+		const durationInSeconds = endTime[0] + endTime[1] / 1e9;
+		MonitoringService.recordRequestDuration(durationInSeconds);
+		MonitoringService.recordRouteRequestDuration(
+			`/player-summary`,
+			durationInSeconds
+		);
 	}
 };
 
@@ -107,6 +140,7 @@ export const getPlayerDataId = async (
 	next: NextFunction
 ) => {
 	const { webName, secondName } = req.body.data;
+	const startTime = process.hrtime();
 
 	try {
 		const response = await axios.request({
@@ -124,12 +158,23 @@ export const getPlayerDataId = async (
 			},
 		});
 
+		MonitoringService.incrementSuccessfulRequests();
+
 		res.status(200).json({
 			playerDataId: response.data.data[0].id,
 		});
 	} catch (err) {
+		MonitoringService.incrementFailedRequests();
 		const error = err as Error;
 		console.error(error.message);
+	} finally {
+		const endTime = process.hrtime(startTime);
+		const durationInSeconds = endTime[0] + endTime[1] / 1e9;
+		MonitoringService.recordRequestDuration(durationInSeconds);
+		MonitoringService.recordRouteRequestDuration(
+			`/player-data`,
+			durationInSeconds
+		);
 	}
 };
 
@@ -141,6 +186,7 @@ export const getPlayerHeatmap = async (
 	const { playerId } = req.body.data;
 	let uniqueTournamentId: number = 17;
 	let seasonId: number = 41886;
+	const startTime = process.hrtime();
 
 	try {
 		const response = await axios.request({
@@ -159,11 +205,22 @@ export const getPlayerHeatmap = async (
 			},
 		});
 
+		MonitoringService.incrementSuccessfulRequests();
+
 		res.status(200).json({
 			playerDataHeatmapPoints: response.data.data.points,
 		});
 	} catch (err) {
+		MonitoringService.incrementFailedRequests();
 		const error = err as Error;
 		console.error(error.message);
+	} finally {
+		const endTime = process.hrtime(startTime);
+		const durationInSeconds = endTime[0] + endTime[1] / 1e9;
+		MonitoringService.recordRequestDuration(durationInSeconds);
+		MonitoringService.recordRouteRequestDuration(
+			`/player-heatmap`,
+			durationInSeconds
+		);
 	}
 };
