@@ -20,13 +20,13 @@ export const getTeamImage = async (
 		);
 		let teamImage = response.config.url;
 
-		MonitoringService.incrementSuccessfulRequests();
+		MonitoringService.incrementSuccessfulRequests(req.route.path);
 
 		res.status(200).json({
 			teamImage,
 		});
 	} catch (err) {
-		MonitoringService.incrementFailedRequests();
+		MonitoringService.incrementFailedRequests(req.route.path);
 		const error = err as Error;
 		console.error(error.message);
 	} finally {

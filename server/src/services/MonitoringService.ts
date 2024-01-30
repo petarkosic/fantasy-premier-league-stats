@@ -20,12 +20,14 @@ class MonitoringService {
 		this.successfulRequestsCounter = new Counter({
 			name: 'api_requests_successful',
 			help: 'Total number of successful API requests',
+			labelNames: ['route'],
 			registers: [this.registry],
 		});
 
 		this.failedRequestsCounter = new Counter({
 			name: 'api_requests_failed',
 			help: 'Total number of failed API requests',
+			labelNames: ['route'],
 			registers: [this.registry],
 		});
 
@@ -37,12 +39,12 @@ class MonitoringService {
 		});
 	}
 
-	incrementSuccessfulRequests(): void {
-		this.successfulRequestsCounter.inc();
+	incrementSuccessfulRequests(route: string): void {
+		this.successfulRequestsCounter.inc({ route });
 	}
 
-	incrementFailedRequests(): void {
-		this.failedRequestsCounter.inc();
+	incrementFailedRequests(route: string): void {
+		this.failedRequestsCounter.inc({ route });
 	}
 
 	recordRequestDuration(duration: number): void {

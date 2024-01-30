@@ -18,13 +18,13 @@ export const callApi = async (
 			'https://fantasy.premierleague.com/api/bootstrap-static/'
 		);
 
-		MonitoringService.incrementSuccessfulRequests();
+		MonitoringService.incrementSuccessfulRequests(req.route.path);
 
 		res.status(200).json({
 			stats: response.data,
 		});
 	} catch (err) {
-		MonitoringService.incrementFailedRequests();
+		MonitoringService.incrementFailedRequests(req.route.path);
 		const error = err as Error;
 		console.error(error.message);
 	} finally {
@@ -48,13 +48,13 @@ export const getPlayerImage = async (
 			`https://resources.premierleague.com/premierleague/photos/players/110x140/p${code}.png`
 		);
 
-		MonitoringService.incrementSuccessfulRequests();
+		MonitoringService.incrementSuccessfulRequests(req.route.path);
 
 		res.status(200).json({
 			image: response.config.url,
 		});
 	} catch (err) {
-		MonitoringService.incrementFailedRequests();
+		MonitoringService.incrementFailedRequests(req.route.path);
 		const error = err as Error;
 		console.error(error.message);
 	} finally {
@@ -84,13 +84,13 @@ export const getPlayer = async (
 			(el: { code: number }) => el.code === parseInt(code)
 		);
 
-		MonitoringService.incrementSuccessfulRequests();
+		MonitoringService.incrementSuccessfulRequests(req.route.path);
 
 		res.status(200).json({
 			player: filteredPlayer,
 		});
 	} catch (err) {
-		MonitoringService.incrementFailedRequests();
+		MonitoringService.incrementFailedRequests(req.route.path);
 		const error = err as Error;
 		console.error(error.message);
 	} finally {
@@ -114,13 +114,13 @@ export const getPlayerSummary = async (
 			`https://fantasy.premierleague.com/api/element-summary/${parseInt(id)}/`
 		);
 
-		MonitoringService.incrementSuccessfulRequests();
+		MonitoringService.incrementSuccessfulRequests(req.route.path);
 
 		res.status(200).json({
 			playerSummary: response.data,
 		});
 	} catch (err) {
-		MonitoringService.incrementFailedRequests();
+		MonitoringService.incrementFailedRequests(req.route.path);
 		const error = err as Error;
 		console.error(error.message);
 	} finally {
@@ -158,13 +158,13 @@ export const getPlayerDataId = async (
 			},
 		});
 
-		MonitoringService.incrementSuccessfulRequests();
+		MonitoringService.incrementSuccessfulRequests(req.route.path);
 
 		res.status(200).json({
 			playerDataId: response.data.data[0].id,
 		});
 	} catch (err) {
-		MonitoringService.incrementFailedRequests();
+		MonitoringService.incrementFailedRequests(req.route.path);
 		const error = err as Error;
 		console.error(error.message);
 	} finally {
@@ -205,13 +205,13 @@ export const getPlayerHeatmap = async (
 			},
 		});
 
-		MonitoringService.incrementSuccessfulRequests();
+		MonitoringService.incrementSuccessfulRequests(req.route.path);
 
 		res.status(200).json({
 			playerDataHeatmapPoints: response.data.data.points,
 		});
 	} catch (err) {
-		MonitoringService.incrementFailedRequests();
+		MonitoringService.incrementFailedRequests(req.route.path);
 		const error = err as Error;
 		console.error(error.message);
 	} finally {
