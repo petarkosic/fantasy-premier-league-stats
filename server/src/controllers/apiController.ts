@@ -139,7 +139,7 @@ export const getPlayerDataId = async (
 	res: Response,
 	next: NextFunction
 ) => {
-	const { webName, secondName } = req.body.data;
+	const { firstName, secondName } = req.body.data;
 	const startTime = process.hrtime();
 
 	try {
@@ -147,7 +147,7 @@ export const getPlayerDataId = async (
 			method: 'GET',
 			url: process.env.RapidAPI_Url,
 			params: {
-				query: `${webName} ${secondName}`,
+				query: `${firstName} ${secondName}`,
 				group: 'players',
 			},
 			headers: {

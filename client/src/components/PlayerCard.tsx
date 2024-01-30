@@ -40,12 +40,12 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 	const playerData: statsModule.RootObject | undefined =
 		queryClient.getQueryData(['stats']) as statsModule.RootObject;
 
-	let topElementWebName: string = data?.web_name;
+	let topELementFirstName: string = data?.first_name;
 	let topElementSecondName: string = data?.second_name;
 
-	const { data: playerDataId } = useQuery(
-		['player-id', topElementWebName, topElementSecondName],
-		() => getPlayerDataId(topElementWebName, topElementSecondName),
+	const { data: playerDataId, error: playerDataIdError } = useQuery(
+		['player-id', topELementFirstName, topElementSecondName],
+		() => getPlayerDataId(topELementFirstName, topElementSecondName),
 		{
 			refetchOnWindowFocus: false,
 		}
@@ -56,6 +56,7 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 		() => getPlayerHeatmapData(playerDataId),
 		{
 			refetchOnWindowFocus: false,
+			enabled: !!playerDataId && !playerDataIdError,
 		}
 	);
 

@@ -33,13 +33,13 @@ export async function getPlayerImage(code: number) {
 	}
 }
 
-export async function getPlayerDataId(webName: string, secondName: string) {
+export async function getPlayerDataId(firstName: string, secondName: string) {
 	try {
 		const {
 			data: { playerDataId },
 		} = await api.post(`/player-data`, {
 			data: {
-				webName: JSON.stringify(webName),
+				firstName: JSON.stringify(firstName),
 				secondName: JSON.stringify(secondName),
 			},
 		});
