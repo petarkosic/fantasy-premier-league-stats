@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  dashboards:
+    - name: Fantasy Premier League
+      orgId: 1
+      folder: ''
+      type: file
+      editable: true
+      disableDeletion: true
+      options:
+        path: /etc/grafana/provisioning/dashboards/dashboard.json
