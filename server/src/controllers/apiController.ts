@@ -143,6 +143,16 @@ export const getPlayerDataId = async (
 	const startTime = process.hrtime();
 
 	try {
+		if (
+			!process.env.X_RapidAPI_Key ||
+			!process.env.X_RapidAPI_Host ||
+			!process.env.RapidAPI_Url
+		) {
+			throw new Error(
+				'API credentials are missing. Player data cannot be retrieved.'
+			);
+		}
+
 		const response = await axios.request({
 			method: 'GET',
 			url: process.env.RapidAPI_Url,
@@ -167,6 +177,7 @@ export const getPlayerDataId = async (
 		MonitoringService.incrementFailedRequests(req.route.path);
 		const error = err as Error;
 		console.error(error.message);
+		res.status(500).json({ error: error.message });
 	} finally {
 		const endTime = process.hrtime(startTime);
 		const durationInSeconds = endTime[0] + endTime[1] / 1e9;
@@ -189,6 +200,16 @@ export const getPlayerHeatmap = async (
 	const startTime = process.hrtime();
 
 	try {
+		if (
+			!process.env.X_RapidAPI_Key ||
+			!process.env.X_RapidAPI_Host ||
+			!process.env.RapidAPI_Heatmap_Url
+		) {
+			throw new Error(
+				'API credentials are missing. Heatmap data cannot be retrieved.'
+			);
+		}
+
 		const response = await axios.request({
 			method: 'GET',
 			url: process.env.RapidAPI_Heatmap_Url,
@@ -214,6 +235,7 @@ export const getPlayerHeatmap = async (
 		MonitoringService.incrementFailedRequests(req.route.path);
 		const error = err as Error;
 		console.error(error.message);
+		res.status(500).json({ error: error.message });
 	} finally {
 		const endTime = process.hrtime(startTime);
 		const durationInSeconds = endTime[0] + endTime[1] / 1e9;

@@ -45,8 +45,14 @@ export async function getPlayerDataId(firstName: string, secondName: string) {
 		});
 
 		return playerDataId;
-	} catch (error) {
-		console.error(error);
+	} catch (error: any) {
+		if (error?.response?.data?.error) {
+			throw new Error(error.response.data.error);
+		} else if (error.message) {
+			throw new Error(error.message);
+		} else {
+			throw new Error('An unexpected error occurred');
+		}
 	}
 }
 
@@ -61,7 +67,13 @@ export async function getPlayerHeatmapData(playerId: number) {
 		});
 
 		return playerDataHeatmapPoints;
-	} catch (error) {
-		console.error(error);
+	} catch (error: any) {
+		if (error?.response?.data?.error) {
+			throw new Error(error.response.data.error);
+		} else if (error.message) {
+			throw new Error(error.message);
+		} else {
+			throw new Error('An unexpected error occurred');
+		}
 	}
 }

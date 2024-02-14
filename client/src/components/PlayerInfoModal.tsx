@@ -30,6 +30,8 @@ type PlayerInfoModalProps = {
 	topElement: any;
 	elementTypes: ElementType[];
 	playerDataHeatmapPoints: HeatmapPoints[];
+	playerDataHeatmapPointsError: unknown;
+	isHeatmapError: boolean;
 };
 
 const PlayerInfoModal = ({
@@ -39,6 +41,8 @@ const PlayerInfoModal = ({
 	topElement,
 	elementTypes,
 	playerDataHeatmapPoints,
+	playerDataHeatmapPointsError,
+	isHeatmapError,
 }: PlayerInfoModalProps) => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -149,6 +153,11 @@ const PlayerInfoModal = ({
 						<div className='player--modal--chart'>{children}</div>
 
 						<div className='heatmap--wrapper'>
+							{isHeatmapError && (
+								<div className='heatmap--error'>
+									{(playerDataHeatmapPointsError as any).message}
+								</div>
+							)}
 							<div className='heatmap--container'>
 								<svg width={88} height={20} viewBox='0 0 88 20'>
 									<g fill='white' fillRule='evenodd'>

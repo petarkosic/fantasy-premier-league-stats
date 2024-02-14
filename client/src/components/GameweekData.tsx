@@ -136,7 +136,11 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		}
 	);
 
-	const { data: playerDataHeatmapPoints } = useQuery(
+	const {
+		data: playerDataHeatmapPoints,
+		isError: isHeatmapError,
+		error: playerDataHeatmapPointsError,
+	} = useQuery(
 		['player-heatmap', playerDataId],
 		() => getPlayerHeatmapData(playerDataId),
 		{
@@ -306,6 +310,8 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 						topElement={topElement}
 						elementTypes={data?.element_types}
 						playerDataHeatmapPoints={playerDataHeatmapPoints}
+						playerDataHeatmapPointsError={playerDataHeatmapPointsError}
+						isHeatmapError={isHeatmapError}
 					>
 						<Chart playerSummary={playerSummary} />
 					</PlayerInfoModal>

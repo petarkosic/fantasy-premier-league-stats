@@ -43,7 +43,7 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 	let topELementFirstName: string = data?.first_name;
 	let topElementSecondName: string = data?.second_name;
 
-	const { data: playerDataId, error: playerDataIdError } = useQuery(
+	const { data: playerDataId } = useQuery(
 		['player-id', topELementFirstName, topElementSecondName],
 		() => getPlayerDataId(topELementFirstName, topElementSecondName),
 		{
@@ -51,12 +51,15 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 		}
 	);
 
-	const { data: playerDataHeatmapPoints } = useQuery(
+	const {
+		data: playerDataHeatmapPoints,
+		isError: isHeatmapError,
+		error: playerDataHeatmapPointsError,
+	} = useQuery(
 		['player-heatmap', playerDataId],
 		() => getPlayerHeatmapData(playerDataId),
 		{
 			refetchOnWindowFocus: false,
-			enabled: !!playerDataId && !playerDataIdError,
 		}
 	);
 
@@ -174,6 +177,8 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 						topElement={searchedPlayer}
 						elementTypes={playerData?.element_types as ElementType[]}
 						playerDataHeatmapPoints={playerDataHeatmapPoints}
+						playerDataHeatmapPointsError={playerDataHeatmapPointsError}
+						isHeatmapError={isHeatmapError}
 					>
 						<Chart playerSummary={playerSummary} />
 					</PlayerInfoModal>

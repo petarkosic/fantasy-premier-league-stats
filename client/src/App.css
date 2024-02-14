@@ -900,6 +900,18 @@ h3 {
 	margin-right: 20px;
 }
 
+.heatmap--error {
+	background: black;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	width: 100%;
+	margin: 0 auto;
+	height: max-content;
+	transform: translateY(-50%);
+	z-index: 10;
+}
+
 .heatmap--container {
 	display: flex;
 	flex-direction: column;
