@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -23,72 +22,60 @@ type GameweekDataProps = {
 export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const queryClient = useQueryClient();
-	const loading = queryClient.isFetching();
 
 	const data: statsModule.RootObject | undefined = queryClient.getQueryData([
 		'stats',
 	]);
 
-	let currentGameweek: statsModule.Event | undefined = data?.events?.filter(
+	let currentGameweek: statsModule.Event[] | undefined = data?.events?.filter(
 		(ev: statsModule.Event) => {
 			return ev.name == selectGameweek;
 		}
 	);
 
-	const chipPlayCardRef = useRef([]);
+	const chipPlayCardRef = useRef<HTMLDivElement[] | null>([]);
 
 	function handleMouseMove(
 		event: React.MouseEvent<HTMLDivElement, MouseEvent>,
 		idx: number
 	) {
-		chipPlayCardRef.current[idx].style.setProperty(
-			'--card-top',
-			event.clientY - chipPlayCardRef.current[idx].offsetHeight / 2 - 450 + 'px'
-		);
-		chipPlayCardRef.current[idx].style.setProperty('--card-opacity', 1);
+		if (chipPlayCardRef.current) {
+			chipPlayCardRef.current[idx].style.setProperty(
+				'--card-top',
+				event.clientY -
+					chipPlayCardRef.current[idx].offsetHeight / 2 -
+					480 +
+					'px'
+			);
+			chipPlayCardRef.current[idx].style.setProperty('--card-opacity', '1');
+		}
 	}
 
 	function handleMouseLeave(idx: number) {
-		chipPlayCardRef.current[idx].style.setProperty('--card-opacity', 0);
+		if (chipPlayCardRef.current) {
+			chipPlayCardRef.current[idx].style.setProperty('--card-opacity', '0');
+		}
 	}
 
 	let {
 		average_entry_score,
 		chip_plays,
-		cup_leagues_created,
-		data_checked,
-		deadline_time,
-		deadline_time_epoch,
-		deadline_time_game_offset,
-		finished,
-		h2h_ko_matches_created,
 		highest_score,
-		highest_scoring_entry,
-		id,
-		is_current,
-		is_next,
-		is_previous,
 		most_captained,
 		most_selected,
 		most_transferred_in,
 		most_vice_captained,
-		name,
-		top_element,
 		top_element_info,
 		transfers_made,
-	} = currentGameweek?.[0];
+	} = currentGameweek?.[0] as statsModule.Event;
 
 	let playerId = top_element_info.id;
-	let topElement = data?.elements.filter((el) => {
-		return el.id === top_element_info.id;
-	});
+	let topElement =
+		data?.elements.filter((el) => {
+			return el.id === top_element_info.id;
+		}) || [];
 
-	// get team image
-	const {
-		data: teamImage,
-		isLoading: isTeamImageLoading,
-		isError: isTeamImageError,
-	} = useQuery(
+	const { data: teamImage, isLoading: isTeamImageLoading } = useQuery(
 		['teamImage', topElement?.[0].team_code],
 		() => getTeamImage(topElement?.[0].team_code!),
 		{
@@ -112,13 +99,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		);
 	});
 
-	// get player image
-	const {
-		data: playerImage,
-		error,
-		isLoading,
-		isError,
-	} = useQuery(
+	const { data: playerImage, isLoading } = useQuery(
 		['player-image', topElement?.[0].code],
 		() => getPlayerImage(topElement?.[0].code as number),
 		{
@@ -126,18 +107,16 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		}
 	);
 
-	// get player summary
-	const {
-		data: playerSummary,
-		error: playerError,
-		isLoading: isPlayerImageLoading,
-		isError: isPlayerError,
-	} = useQuery(['player-summary', playerId], () => getPlayerSummary(playerId), {
-		refetchOnWindowFocus: false,
-	});
+	const { data: playerSummary, isLoading: isPlayerImageLoading } = useQuery(
+		['player-summary', playerId],
+		() => getPlayerSummary(playerId),
+		{
+			refetchOnWindowFocus: false,
+		}
+	);
 
-	let topElementWebName = topElement?.[0].web_name;
-	let topElementSecondName = topElement?.[0].second_name;
+	let topElementWebName = topElement?.[0].web_name || '';
+	let topElementSecondName = topElement?.[0].second_name || '';
 
 	const { data: playerDataId } = useQuery(
 		['player-id', topElementWebName, topElementSecondName],
@@ -231,7 +210,12 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 								<div
 									key={chip.chip_name}
 									className={`chip_play chip--${chip.chip_name}`}
-									ref={(el) => (chipPlayCardRef.current[index] = el)}
+									ref={(el: HTMLDivElement) => {
+										return (
+											chipPlayCardRef.current &&
+											(chipPlayCardRef.current[index] = el)
+										);
+									}}
 									onMouseMove={(e) => handleMouseMove(e, index)}
 									onMouseLeave={() => handleMouseLeave(index)}
 								>

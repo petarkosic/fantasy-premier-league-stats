@@ -3,20 +3,6 @@ import { PlayerImage } from './PlayerImage';
 import { PlayerName } from './PlayerName';
 import { formatCurrency } from '../utils/formatNumber';
 
-type ElementType = {
-	id: number;
-	plural_name: string;
-	plural_name_short: string;
-	singular_name: string;
-	singular_name_short: string;
-	squad_select: number;
-	squad_min_play: number;
-	squad_max_play: number;
-	ui_shirt_specific: true;
-	sub_positions_locked: number[] | null[];
-	element_count: number;
-};
-
 type HeatmapPoints = {
 	count: number;
 	x: number;
@@ -28,7 +14,7 @@ type PlayerInfoModalProps = {
 	close: () => void;
 	children: React.ReactNode;
 	topElement: any;
-	elementTypes: ElementType[];
+	elementTypes: statsModule.ElementType[] | undefined;
 	playerDataHeatmapPoints: HeatmapPoints[];
 	playerDataHeatmapPointsError: unknown;
 	isHeatmapError: boolean;
@@ -46,8 +32,8 @@ const PlayerInfoModal = ({
 }: PlayerInfoModalProps) => {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 
-	const elementType = elementTypes.find(
-		(el: ElementType) => el.id == topElement?.[0].element_type
+	const elementType = elementTypes?.find(
+		(el: statsModule.ElementType) => el.id == topElement?.[0].element_type
 	);
 
 	useEffect(() => {
@@ -78,7 +64,6 @@ const PlayerInfoModal = ({
 		<div>
 			{isModalOpen && (
 				<div className='player--modal'>
-					{/* <div className='bg--image'></div> */}
 					<div className='player--modal--summary'>
 						<div className='modal--banner'>
 							<div className='modalimage'>
