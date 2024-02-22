@@ -14,6 +14,7 @@ import { PlayerName } from './PlayerName';
 import { PlayerImage } from './PlayerImage';
 import MostPlayer from './MostPlayer';
 import PlayerInfoModal from './PlayerInfoModal';
+import { teamColors } from '../utils/teamColors';
 
 type GameweekDataProps = {
 	selectGameweek: string | undefined;
@@ -89,16 +90,26 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		isError: isTeamImageError,
 	} = useQuery(
 		['teamImage', topElement?.[0].team_code],
-		() => getTeamImage(topElement?.[0].team_code),
+		() => getTeamImage(topElement?.[0].team_code!),
 		{
 			refetchOnWindowFocus: false,
 		}
 	);
 
-	const cardRef = useRef<HTMLDivElement | null>(null);
+	const cardRef = useRef<HTMLDivElement>(null);
+
+	let topElementTeam = topElement?.[0].team_code || 0;
 
 	useEffect(() => {
 		cardRef?.current?.style?.setProperty('--bg-image', `url('${teamImage}')`);
+		cardRef?.current?.style?.setProperty(
+			'--bg-color-primary',
+			`${teamColors[topElementTeam][0]}`
+		);
+		cardRef?.current?.style?.setProperty(
+			'--bg-color-secondary',
+			`${teamColors[topElementTeam][1]}`
+		);
 	});
 
 	// get player image
