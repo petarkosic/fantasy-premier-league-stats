@@ -1,14 +1,14 @@
-// @ts-nocheck
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { GameweekData } from '../components/GameweekData';
 import { GameweekSelect } from '../components/GameweekSelect';
+import { Navbar } from '../components/Navbar';
 
 export const Gameweek = () => {
 	const queryClient = useQueryClient();
-	const data: statsModule.RootObject | undefined = queryClient.getQueryData({
-		stats: 'stats',
-	});
+	const data: statsModule.RootObject | undefined = queryClient.getQueryData([
+		'stats',
+	]);
 
 	let currentGameweek = data?.events?.filter((ev: statsModule.Event) => {
 		return ev.is_current;
@@ -19,6 +19,7 @@ export const Gameweek = () => {
 
 	return (
 		<>
+			<Navbar />
 			<div className='select-menu'>
 				<div className='select'>
 					<GameweekSelect

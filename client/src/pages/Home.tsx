@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { ChangeEvent, ReactNode, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import PlayerCardGrid from '../components/PlayerCardGrid';
 import { Search } from '../components/Search';
 import { getStats } from '../services/getStats';
 import { useDebounce } from '../hooks/useDebounce';
+import { Navbar } from '../components/Navbar';
 
 export const Home = () => {
 	const [playerName, setPlayerName] = useState<string>('');
@@ -40,13 +40,7 @@ export const Home = () => {
 
 	return (
 		<>
-			<div className='select-menu'>
-				<div className='select'>
-					<Link to='/gameweek'>
-						{location.pathname === '/gameweek' ? null : 'Gameweek Data'}
-					</Link>
-				</div>
-			</div>
+			<Navbar />
 			<Search
 				playerName={playerName}
 				handleSearchPlayerName={handleSearchPlayerName}
