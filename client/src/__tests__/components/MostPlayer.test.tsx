@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import MostPlayer from '../../components/MostPlayer'; // Update the import path accordingly
+import MostPlayer from '../../components/MostPlayer/MostPlayer';
 
 describe('MostPlayer', () => {
 	it('renders the component with provided props', () => {

@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import { GameweekSelect } from '../../components/GameweekSelect'; // Update the import path accordingly
+import { GameweekSelect } from '../../components/GameweekSelect/GameweekSelect';
 import { statsMockData } from '../__mocks__/statsMockData';
 
 const renderComponent = () => {

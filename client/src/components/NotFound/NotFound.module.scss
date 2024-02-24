@@ -1,0 +1,12 @@
+@import '../../styles/mixins';
+
+.notFoundWrapper {
+	@include flex(column, center, center);
+	gap: 2rem;
+
+	.buttons {
+		width: 100%;
+		@include flex(row, center, flex-start);
+		gap: 2rem;
+	}
+}

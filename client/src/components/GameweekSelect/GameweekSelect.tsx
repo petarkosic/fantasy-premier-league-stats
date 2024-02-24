@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react';
-import '../App.css';
+import styles from './GameweekSelect.module.scss';
 
 type GameweekSelectProps = {
 	data: statsModule.RootObject | undefined;
@@ -17,9 +17,9 @@ export const GameweekSelect = ({
 	};
 
 	return (
-		<div className='select gameweek'>
+		<div className={`${styles.select} ${styles.gameweek}`}>
 			<select
-				className='select-dropdown'
+				className={styles.selectDropdown}
 				value={selectGameweek}
 				onChange={(e) => handleSelectGameweekChange(e)}
 				name='gameweek'

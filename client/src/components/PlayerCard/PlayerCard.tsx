@@ -4,28 +4,15 @@ import {
 	getPlayerHeatmapData,
 	getPlayerImage,
 	getPlayerSummary,
-} from '../services/playerStats';
-import { PlayerName } from './PlayerName';
-import { PlayerImage } from './PlayerImage';
-import { getTeamImage } from '../services/teamStats';
+} from '../../services/playerStats';
+import { PlayerName } from '../PlayerName/PlayerName';
+import { PlayerImage } from '../PlayerImage/PlayerImage';
+import { getTeamImage } from '../../services/teamStats';
 import { useEffect, useRef, useState } from 'react';
-import transparentImage from '../assets/transparent.png';
-import PlayerInfoModal from './PlayerInfoModal';
-import { Chart } from './Chart';
-
-type ElementType = {
-	id: number;
-	plural_name: string;
-	plural_name_short: string;
-	singular_name: string;
-	singular_name_short: string;
-	squad_select: number;
-	squad_min_play: number;
-	squad_max_play: number;
-	ui_shirt_specific: true;
-	sub_positions_locked: number[] | null[];
-	element_count: number;
-};
+import transparentImage from '../../assets/transparent.png';
+import PlayerInfoModal from '../PlayerInfoModal/PlayerInfoModal';
+import { Chart } from '../Chart/Chart';
+import styles from './PlayerCard.module.scss';
 
 type PlayerCardProps = {
 	data: statsModule.Element;
@@ -64,7 +51,7 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 	);
 
 	let playerId = data.id;
-	let searchedPlayer = playerData?.elements.filter((el) => {
+	let searchedPlayer = playerData?.elements?.filter((el) => {
 		return el.id === playerId;
 	});
 
@@ -105,9 +92,9 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 	});
 
 	return (
-		<div className='card-wrapper'>
-			<div ref={cardRef} className='card'>
-				<div className='card-top'>
+		<div className={styles.cardWrapper}>
+			<div ref={cardRef} className={styles.card}>
+				<div className={styles.cardTop}>
 					<PlayerName
 						id={data.id}
 						firstName={data.first_name}
@@ -119,10 +106,10 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 						<PlayerImage playerImage={playerImage} />
 					)}
 				</div>
-				<hr className='divider' />
-				<div className='home-card-bottom'>
+				<hr className={styles.divider} />
+				<div className={styles.homeCardBottom}>
 					<div
-						className='news'
+						className={styles.news}
 						style={{
 							display: !data.news ? 'none' : 'block',
 							color:
@@ -134,8 +121,8 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 						{data.news}
 					</div>
 
-					<div className='bottom-data'>
-						<div className='left'>
+					<div className={styles.bottomData}>
+						<div className={styles.left}>
 							<div>
 								<p>Goals: {data.goals_scored}</p>
 							</div>
@@ -149,7 +136,7 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 								<p>Selected By: {data.selected_by_percent} %</p>
 							</div>
 						</div>
-						<div className='right'>
+						<div className={styles.right}>
 							<div>
 								<p>Total Points: {data?.total_points}</p>
 							</div>
@@ -164,18 +151,18 @@ const PlayerCard = ({ data }: PlayerCardProps) => {
 							</div>
 						</div>
 					</div>
-					<div className='view-more-button'>
+					<div className={styles.viewMoreButton}>
 						<button onClick={() => setIsModalOpen(true)}>View More</button>
 					</div>
 				</div>
 			</div>
 			{isModalOpen && (
-				<div className='player--modal--wrapper'>
+				<div className={styles.playerModalWrapper}>
 					<PlayerInfoModal
 						isModalOpen={isModalOpen}
 						close={() => setIsModalOpen(false)}
 						topElement={searchedPlayer}
-						elementTypes={playerData?.element_types as ElementType[]}
+						elementTypes={playerData?.element_types}
 						playerDataHeatmapPoints={playerDataHeatmapPoints}
 						playerDataHeatmapPointsError={playerDataHeatmapPointsError}
 						isHeatmapError={isHeatmapError}

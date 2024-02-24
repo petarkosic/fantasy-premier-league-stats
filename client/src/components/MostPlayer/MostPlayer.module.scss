@@ -1,0 +1,34 @@
+@import '../../styles/mixins';
+
+.mostPlayer {
+	width: 100%;
+	height: 100%;
+	@include flex(row, center, center);
+	gap: 1rem;
+
+	.most {
+		width: 200px;
+		height: 100px;
+		padding: 10px;
+		@include flex(column, center, space-between);
+		box-shadow: inset 0 0 20px 1px rgba(154, 59, 251, 0.4);
+		border-radius: 0.5rem;
+		position: relative;
+
+		p {
+			color: #9a3bfb;
+			width: 100%;
+			text-align: left;
+			font-weight: bold;
+		}
+
+		span {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			padding: 10px;
+			font-size: 1.25rem;
+			font-weight: bold;
+		}
+	}
+}

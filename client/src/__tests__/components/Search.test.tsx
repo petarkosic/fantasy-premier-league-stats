@@ -1,5 +1,5 @@
 import { cleanup, fireEvent, render } from '@testing-library/react';
-import { Search } from '../../components/Search';
+import { Search } from '../../components/Search/Search';
 
 afterEach(cleanup);
 
@@ -52,6 +52,8 @@ describe('Search', () => {
 		const inputElement = getByPlaceholderText('search player by player name');
 
 		expect(inputElement).toBeInTheDocument();
-		expect(inputElement).toHaveClass('search-input');
+		expect(inputElement.className).toEqual(
+			expect.stringMatching(/.*searchInput.*/)
+		);
 	});
 });

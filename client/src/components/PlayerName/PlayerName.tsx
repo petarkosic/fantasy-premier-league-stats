@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import styles from './PlayerName.module.scss';
 
 type PlayerNameProps = {
 	id: number;
@@ -12,7 +13,7 @@ export const PlayerName = ({ id, firstName, secondName }: PlayerNameProps) => {
 			initial={{ y: 50, x: -50, opacity: 0, scale: 0.5 }}
 			animate={{ y: 0, x: 0, opacity: 1, scale: 1 }}
 			transition={{ duration: 0.2 }}
-			className='card-top--name'
+			className={styles.cardTopName}
 			key={id}
 		>
 			<p>{firstName}</p>

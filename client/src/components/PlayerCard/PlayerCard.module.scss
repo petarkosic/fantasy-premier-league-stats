@@ -1,0 +1,133 @@
+@import '../../styles/mixins';
+
+.cardWrapper {
+	width: 400px;
+	height: 500px;
+	border-radius: 1rem;
+	background: #333;
+
+	.card {
+		--bg-image: '';
+		--bg-color-primary: 'rgba(0, 0, 0, 0)';
+		--bg-color-secondary: 'rgba(0, 0, 0, 0)';
+		width: 100%;
+		height: 100%;
+		border-radius: 1rem;
+		padding: 1rem;
+		@include flex(column, center, center);
+		border-radius: 1rem;
+		position: relative;
+		overflow: hidden;
+		color: white;
+		background: var(--bg-color-primary);
+		background: linear-gradient(
+			85deg,
+			var(--bg-color-secondary) 0%,
+			var(--bg-color-primary) 20%,
+			var(--bg-color-secondary) 25%,
+			var(--bg-color-primary) 30%,
+			var(--bg-color-secondary) 35%,
+			var(--bg-color-primary) 45%,
+			var(--bg-color-secondary) 55%,
+			var(--bg-color-primary) 60%,
+			var(--bg-color-secondary) 65%,
+			var(--bg-color-primary) 70%,
+			var(--bg-color-secondary) 75%,
+			var(--bg-color-primary) 80%,
+			var(--bg-color-secondary) 85%,
+			var(--bg-color-primary) 90%,
+			var(--bg-color-secondary) 100%
+		);
+
+		&::before {
+			content: '';
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-image: var(--bg-image);
+			background-size: 250px 250px;
+			background-repeat: no-repeat;
+			transform: skew(20deg, -10deg);
+			filter: grayscale(100%);
+			opacity: 0.3;
+		}
+
+		.cardTop {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			@include flex(row, flex-end, space-between);
+			padding: 0 1rem;
+			border-radius: 0.5rem 0.5rem 0 0;
+			overflow: hidden;
+			z-index: 100;
+
+			.price {
+				height: 100%;
+				color: white;
+				opacity: 0.87;
+				z-index: 400;
+				font-size: 2rem;
+			}
+		}
+
+		.divider {
+			width: 400px;
+			border: 1px solid #9a3bfb;
+			margin-bottom: 1rem;
+			z-index: 100;
+		}
+
+		.homeCardBottom {
+			position: relative;
+			width: 100%;
+			height: 100%;
+			padding: 0 1rem;
+			@include flex(column, center, center);
+			gap: 1rem;
+
+			.news {
+				position: absolute;
+				top: -0.5em;
+				width: 100%;
+				height: 2rem;
+				font-weight: bold;
+			}
+
+			.bottomData {
+				width: 100%;
+				height: 100%;
+				@include flex(row, center, center);
+
+				.left,
+				.right {
+					width: 100%;
+					height: 100%;
+					@include flex(column, flex-start, center);
+					gap: 0.5rem;
+					text-align: left;
+				}
+			}
+
+			.viewMoreButton {
+				width: 100%;
+				margin: 0;
+				padding-top: 10px;
+				@include flex(row, center, flex-end);
+			}
+		}
+	}
+
+	.playerModalWrapper {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		@include flex(row, center, center);
+		background: rgba(0, 0, 0, 0.7);
+		z-index: 1000;
+	}
+}

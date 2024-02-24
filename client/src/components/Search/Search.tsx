@@ -1,6 +1,7 @@
 // @tsx React.tsx
 
 import { ChangeEvent } from 'react';
+import styles from './Search.module.scss';
 
 type SearchProps = {
 	playerName: string;
@@ -10,7 +11,7 @@ type SearchProps = {
 export const Search = ({ playerName, handleSearchPlayerName }: SearchProps) => {
 	return (
 		<input
-			className='search-input'
+			className={styles.searchInput}
 			value={playerName}
 			onChange={handleSearchPlayerName}
 			type='search'

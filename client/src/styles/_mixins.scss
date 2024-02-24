@@ -1,0 +1,27 @@
+@mixin font-weight($weight) {
+	$weights: (
+		thin: 100,
+		extra-light: 200,
+		light: 300,
+		normal: 400,
+		medium: 500,
+		semi-bold: 600,
+		bold: 700,
+		extra-bold: 800,
+		heavy: 900,
+	);
+
+	$output: $weight;
+	@if map-has-key($weights, $weight) {
+		$output: map-get($weights, $weight);
+	}
+
+	font-weight: $output;
+}
+
+@mixin flex($direction, $align, $justify) {
+	display: flex;
+	flex-direction: $direction;
+	align-items: $align;
+	justify-content: $justify;
+}

@@ -1,12 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;200;300;400;700;800;900&display=swap');
+
 :root {
 	font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
 	font-size: 16px;
 	line-height: 24px;
 	font-weight: 400;
 
-	color-scheme: light dark;
-	color: rgba(255, 255, 255, 0.87);
-	background-color: #242424;
+	color: rgba(0, 0, 0, 0.87);
+	background: #ffffff;
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -16,12 +17,15 @@
 
 	max-width: 1400px;
 	margin: 0 auto;
+	padding: 2rem;
+	text-align: center;
 }
 
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: 'Lato', sans-serif;
 }
 
 a {
@@ -29,6 +33,7 @@ a {
 	color: #646cff;
 	text-decoration: inherit;
 }
+
 a:hover {
 	color: #535bf2;
 }
@@ -42,21 +47,15 @@ h1 {
 
 button {
 	border-radius: 8px;
-	border: 1px solid transparent;
+	border: none;
 	padding: 0.6em 1.2em;
 	font-size: 1em;
 	font-weight: 500;
 	font-family: inherit;
-	background-color: #1a1a1a;
 	cursor: pointer;
 	transition: border-color 0.25s;
-}
-button:hover {
-	border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-	outline: 4px auto -webkit-focus-ring-color;
+	background-image: linear-gradient(rgba(255, 255, 255, 0) 180px, white 320px),
+		linear-gradient(to right, rgb(2, 239, 255), rgb(98, 123, 255));
 }
 
 @media (prefers-color-scheme: light) {

@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { Chart } from '../../components/Chart';
+import { Chart } from '../../components/Chart/Chart';
 import { playerSummaryMockData } from '../__mocks__/playerSummaryMockData';
 
 describe('chart', () => {
@@ -11,6 +11,6 @@ describe('chart', () => {
 		const chartDiv = getByTestId('chart');
 
 		expect(chartDiv).toBeInTheDocument();
-		expect(chartDiv).toHaveClass('chart');
+		expect(chartDiv.className).toEqual(expect.stringMatching(/.*chart.*/));
 	});
 });

@@ -5,15 +5,16 @@ import {
 	getPlayerHeatmapData,
 	getPlayerImage,
 	getPlayerSummary,
-} from '../services/playerStats';
-import { getTeamImage } from '../services/teamStats';
-import { formatCurrency, formatNumber } from '../utils/formatNumber';
-import { Chart } from './Chart';
-import { PlayerName } from './PlayerName';
-import { PlayerImage } from './PlayerImage';
-import MostPlayer from './MostPlayer';
-import PlayerInfoModal from './PlayerInfoModal';
-import { teamColors } from '../utils/teamColors';
+} from '../../services/playerStats';
+import { getTeamImage } from '../../services/teamStats';
+import { formatCurrency, formatNumber } from '../../utils/formatNumber';
+import { Chart } from '../Chart/Chart';
+import { PlayerName } from '../PlayerName/PlayerName';
+import { PlayerImage } from '../PlayerImage/PlayerImage';
+import MostPlayer from '../MostPlayer/MostPlayer';
+import PlayerInfoModal from '../PlayerInfoModal/PlayerInfoModal';
+import { teamColors } from '../../utils/teamColors';
+import styles from './GameweekData.module.scss';
 
 type GameweekDataProps = {
 	selectGameweek: string | undefined;
@@ -160,15 +161,15 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 
 	return (
 		<div>
-			<div className='dashboard-wrapper'>
-				<div className='dashboard'>
-					<div className='dashboard--gw'>
-						<div className='row'>
-							<div className='transfers'>
+			<div className={styles.dashboardWrapper}>
+				<div className={styles.dashboard}>
+					<div className={styles.dashboardGw}>
+						<div className={styles.row}>
+							<div className={styles.transfers}>
 								<p>Transfers Made:</p>
 								<span>{formatNumber(transfers_made)}</span>
 							</div>
-							<div className='score'>
+							<div className={styles.score}>
 								<div>
 									<p>Average Score:</p>
 									<span>{average_entry_score}</span>
@@ -179,37 +180,37 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 								</div>
 							</div>
 						</div>
-						<div className='most-player'>
+						<div className={styles.mostPlayer}>
 							<MostPlayer
-								className='most selected'
+								className={`${styles.most} ${styles.selected}}`}
 								label='Most Selected:'
 								firstName={mostSelected?.[0].first_name || ''}
 								secondName={mostSelected?.[0].second_name || ''}
 							/>
 							<MostPlayer
-								className='most captained'
+								className={`${styles.most} ${styles.captained}}`}
 								label='Most Captained:'
 								firstName={mostCaptained?.[0].first_name || ''}
 								secondName={mostCaptained?.[0].second_name || ''}
 							/>
 							<MostPlayer
-								className='most vice-captained'
+								className={`${styles.most} ${styles.viceCaptained}}`}
 								label='Most Vice Captained:'
 								firstName={mostViceCaptained?.[0].first_name || ''}
 								secondName={mostViceCaptained?.[0].second_name || ''}
 							/>
 							<MostPlayer
-								className='most transferred'
+								className={`${styles.most} ${styles.transferred}}`}
 								label='Most Transferred:'
 								firstName={mostTransferedIn?.[0].first_name || ''}
 								secondName={mostTransferedIn?.[0].second_name || ''}
 							/>
 						</div>
-						<div className='chip--wrapper'>
+						<div className={styles.chipWrapper}>
 							{chip_plays.map((chip: statsModule.ChipPlay, index: number) => (
 								<div
 									key={chip.chip_name}
-									className={`chip_play chip--${chip.chip_name}`}
+									className={`${styles.chipPlay} chip--${chip.chip_name}`}
 									ref={(el: HTMLDivElement) => {
 										return (
 											chipPlayCardRef.current &&
@@ -219,22 +220,25 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 									onMouseMove={(e) => handleMouseMove(e, index)}
 									onMouseLeave={() => handleMouseLeave(index)}
 								>
-									<span className='chip--name' data-chip-name={chip.chip_name}>
+									<span
+										className={styles.chipName}
+										data-chip-name={chip.chip_name}
+									>
 										{chip.chip_name}
 									</span>{' '}
-									<span className='chip--num_played'>
+									<span className={styles.chipNumPlayed}>
 										{formatNumber(chip.num_played)}
 									</span>
 								</div>
 							))}
 						</div>
 					</div>
-					<div className='player--info'>
-						<h2 className='player-tag'>Player Of The Week</h2>
-						<div className='card-wrapper'>
-							<div ref={cardRef} className='card'>
-								<div className='card-top'>
-									<div className='bg--image'></div>
+					<div className={styles.playerInfo}>
+						<h2 className={styles.playerTag}>Player Of The Week</h2>
+						<div className={styles.cardWrapper}>
+							<div ref={cardRef} className={styles.card}>
+								<div className={styles.cardTop}>
+									<div className={styles.bgImage}></div>
 									{topElement?.map((el) => (
 										<PlayerName
 											key={el.id}
@@ -244,17 +248,16 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 										/>
 									))}
 									<PlayerImage topElement={topElement} />
-									<p className='price'>
-										{/* {formatCurrency(currentRound?.[0].value)} */}
+									<p className={styles.price}>
 										{formatCurrency(topElement?.[0].now_cost)}
 									</p>
 								</div>
-								<div className='divider'></div>
-								<div className='card-bottom'>
+								<div className={styles.divider}></div>
+								<div className={styles.cardBottom}>
 									{topElement?.map((el) => (
 										<div
 											key={el.id}
-											className='news'
+											className={styles.news}
 											style={{
 												display: !el.news ? 'none' : 'block',
 												color:
@@ -266,7 +269,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 											{el.news}
 										</div>
 									))}
-									<div className='player--gw'>
+									<div className={styles.playerGw}>
 										<p>
 											Gameweek Price: {formatCurrency(currentRound?.[0].value)}
 										</p>
@@ -275,7 +278,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 											Selected by: {formatNumber(currentRound?.[0].selected)}{' '}
 											players ({topElement?.[0].selected_by_percent}%)
 										</p>
-										<div className='player--transfers'>
+										<div className={styles.playerTransfers}>
 											<p>
 												Transfers in:{' '}
 												{formatNumber(currentRound?.[0].transfers_in)}
@@ -286,7 +289,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 											</p>
 										</div>
 									</div>
-									<div className='view-more-button'>
+									<div className={styles.viewMoreButton}>
 										<button onClick={() => setIsModalOpen(true)}>
 											View More
 										</button>
@@ -296,22 +299,22 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 						</div>
 					</div>
 				</div>
+				{isModalOpen && (
+					<div className={styles.playerModalWrapper}>
+						<PlayerInfoModal
+							isModalOpen={isModalOpen}
+							close={() => setIsModalOpen(false)}
+							topElement={topElement}
+							elementTypes={data?.element_types}
+							playerDataHeatmapPoints={playerDataHeatmapPoints}
+							playerDataHeatmapPointsError={playerDataHeatmapPointsError}
+							isHeatmapError={isHeatmapError}
+						>
+							<Chart playerSummary={playerSummary} />
+						</PlayerInfoModal>
+					</div>
+				)}
 			</div>
-			{isModalOpen && (
-				<div className='player--modal--wrapper'>
-					<PlayerInfoModal
-						isModalOpen={isModalOpen}
-						close={() => setIsModalOpen(false)}
-						topElement={topElement}
-						elementTypes={data?.element_types}
-						playerDataHeatmapPoints={playerDataHeatmapPoints}
-						playerDataHeatmapPointsError={playerDataHeatmapPointsError}
-						isHeatmapError={isHeatmapError}
-					>
-						<Chart playerSummary={playerSummary} />
-					</PlayerInfoModal>
-				</div>
-			)}
 		</div>
 	);
 };

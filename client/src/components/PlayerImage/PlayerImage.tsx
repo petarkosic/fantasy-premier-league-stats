@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
+import styles from './PlayerImage.module.scss';
 
 type PlayerImageProps = {
 	playerImage: any;
@@ -22,7 +23,7 @@ export const PlayerImage = ({
 			initial={{ y: 150, opacity: 0, scale: 0.5 }}
 			animate={{ y: 0, opacity: 1, scale: 1 }}
 			transition={{ duration: 0.2 }}
-			className='card-top--image'
+			className={styles.cardTopImage}
 		>
 			<img src={playerImage ? playerImage : image} alt='player image' />
 		</motion.div>

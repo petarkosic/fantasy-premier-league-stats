@@ -10,6 +10,7 @@ import {
 	Tooltip,
 	Legend,
 } from 'recharts';
+import styles from './Chart.module.scss';
 
 type ChartProps = {
 	playerSummary: playerSummaryModule.PlayerSummary;
@@ -45,7 +46,7 @@ export const Chart = ({ playerSummary }: ChartProps) => {
 	}, []);
 
 	return (
-		<div data-testid='chart' className='chart' ref={chartRef}>
+		<div data-testid='chart' className={styles.chart} ref={chartRef}>
 			<AreaChart
 				width={chartWidth}
 				height={280}

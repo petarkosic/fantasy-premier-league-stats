@@ -1,0 +1,19 @@
+.searchInput {
+	width: 40rem;
+	height: 3rem;
+	margin-top: 1rem;
+	margin: 1rem auto 0;
+	text-indent: 1rem;
+	font-size: 1.5rem;
+
+	&::placeholder {
+		height: 100%;
+		font-size: 1.5rem;
+	}
+}
+
+@media (max-width: 861px) {
+	.searchInput {
+		max-width: 100%;
+	}
+}

@@ -1,4 +1,5 @@
-import PlayerCard from './PlayerCard';
+import PlayerCard from '../PlayerCard/PlayerCard';
+import styles from './PlayerCardGrid.module.scss';
 
 type PlayerCardGridProps = {
 	data: statsModule.Element[] | undefined | null;
@@ -6,7 +7,7 @@ type PlayerCardGridProps = {
 
 const PlayerCardGrid = ({ data }: PlayerCardGridProps) => {
 	return (
-		<div className='grid'>
+		<div className={styles.grid}>
 			{data?.map((player: statsModule.Element, i: number) => (
 				<PlayerCard key={i} data={player} />
 			))}

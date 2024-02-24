@@ -1,13 +1,15 @@
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
-import { NotFound } from './components/NotFound';
+import { NotFound } from './components/NotFound/NotFound';
 
 const Home = lazy(() =>
-	import('./pages/Home').then(({ Home }) => ({ default: Home }))
+	import('./pages/Home/Home').then(({ Home }) => ({ default: Home }))
 );
 const Gameweek = lazy(() =>
-	import('./pages/Gameweek').then(({ Gameweek }) => ({ default: Gameweek }))
+	import('./pages/Gameweek/Gameweek').then(({ Gameweek }) => ({
+		default: Gameweek,
+	}))
 );
 
 function App() {

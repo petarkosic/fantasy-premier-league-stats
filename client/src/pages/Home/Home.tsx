@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { ChangeEvent, ReactNode, useMemo, useState } from 'react';
-import PlayerCardGrid from '../components/PlayerCardGrid';
-import { Search } from '../components/Search';
-import { getStats } from '../services/getStats';
-import { useDebounce } from '../hooks/useDebounce';
-import { Navbar } from '../components/Navbar';
+import PlayerCardGrid from '../../components/PlayerCardGrid/PlayerCardGrid';
+import { Search } from '../../components/Search/Search';
+import { getStats } from '../../services/getStats';
+import { useDebounce } from '../../hooks/useDebounce';
+import { Navbar } from '../../components/Navbar/Navbar';
+import styles from './Home.module.scss';
 
 export const Home = () => {
 	const [playerName, setPlayerName] = useState<string>('');
@@ -46,7 +47,9 @@ export const Home = () => {
 				handleSearchPlayerName={handleSearchPlayerName}
 			/>
 			{player && player.length === 0 ? (
-				<div className='no-player'>There is no player with that name...</div>
+				<div className={styles.noPlayer}>
+					There is no player with that name...
+				</div>
 			) : null}
 			<PlayerCardGrid data={playerName ? player : null} />
 		</>

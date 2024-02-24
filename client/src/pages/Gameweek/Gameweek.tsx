@@ -1,8 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { GameweekData } from '../components/GameweekData';
-import { GameweekSelect } from '../components/GameweekSelect';
-import { Navbar } from '../components/Navbar';
+import { GameweekData } from '../../components/GameweekData/GameweekData';
+import { GameweekSelect } from '../../components/GameweekSelect/GameweekSelect';
+import { Navbar } from '../../components/Navbar/Navbar';
+import styles from './Gameweek.module.scss';
 
 export const Gameweek = () => {
 	const queryClient = useQueryClient();
@@ -20,8 +21,8 @@ export const Gameweek = () => {
 	return (
 		<>
 			<Navbar />
-			<div className='select-menu'>
-				<div className='select'>
+			<div className={styles.selectMenu}>
+				<div className={styles.select}>
 					<GameweekSelect
 						data={data}
 						selectGameweek={selectGameweek}
