@@ -70,15 +70,15 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		transfers_made,
 	} = currentGameweek?.[0] as statsModule.Event;
 
-	let playerId = top_element_info.id;
+	let playerId = top_element_info?.id;
 	let topElement =
 		data?.elements.filter((el) => {
-			return el.id === top_element_info.id;
+			return el.id === top_element_info?.id;
 		}) || [];
 
 	const { data: teamImage, isLoading: isTeamImageLoading } = useQuery(
-		['teamImage', topElement?.[0].team_code],
-		() => getTeamImage(topElement?.[0].team_code!),
+		['teamImage', topElement?.[0]?.team_code],
+		() => getTeamImage(topElement?.[0]?.team_code!),
 		{
 			refetchOnWindowFocus: false,
 		}
@@ -86,7 +86,7 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 
 	const cardRef = useRef<HTMLDivElement>(null);
 
-	let topElementTeam = topElement?.[0].team_code || 0;
+	let topElementTeam = topElement?.[0]?.team_code || 0;
 
 	useEffect(() => {
 		cardRef?.current?.style?.setProperty('--bg-image', `url('${teamImage}')`);
@@ -101,8 +101,8 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 	});
 
 	const { data: playerImage, isLoading } = useQuery(
-		['player-image', topElement?.[0].code],
-		() => getPlayerImage(topElement?.[0].code as number),
+		['player-image', topElement?.[0]?.code],
+		() => getPlayerImage(topElement?.[0]?.code as number),
 		{
 			refetchOnWindowFocus: false,
 		}
@@ -116,8 +116,8 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		}
 	);
 
-	let topElementWebName = topElement?.[0].web_name || '';
-	let topElementSecondName = topElement?.[0].second_name || '';
+	let topElementWebName = topElement?.[0]?.web_name || '';
+	let topElementSecondName = topElement?.[0]?.second_name || '';
 
 	const { data: playerDataId } = useQuery(
 		['player-id', topElementWebName, topElementSecondName],
