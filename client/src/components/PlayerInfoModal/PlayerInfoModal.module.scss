@@ -98,7 +98,7 @@
 					}
 
 					div:nth-of-type(1) {
-						font-weight: 900;
+						@include font-weight(heavy);
 						font-size: 1.25rem;
 					}
 
@@ -108,14 +108,14 @@
 
 					.rankTitle {
 						strong {
-							font-weight: 900;
+							@include font-weight(heavy);
 						}
 					}
 				}
 
 				h3 {
 					font-size: 0.7rem;
-					font-weight: normal;
+					@include font-weight(normal);
 
 					&::before {
 						content: '';
@@ -175,7 +175,7 @@
 				z-index: 10;
 				color: black;
 				border-radius: 6px;
-				font-weight: bold;
+				@include font-weight(bold);
 				background-image: linear-gradient(
 						rgba(255, 255, 255, 0) 180px,
 						white 320px

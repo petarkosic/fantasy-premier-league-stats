@@ -4,11 +4,11 @@
 	width: 100%;
 	@include flex(column, start, flex-start);
 	font-size: 2rem;
-	font-weight: bold;
+	@include font-weight(bold);
 	text-align: left;
 	z-index: 101;
 
 	p:nth-child(2) {
-		color: #9a3bfb;
+		color: white;
 	}
 }

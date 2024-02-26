@@ -19,7 +19,7 @@
 			color: #9a3bfb;
 			width: 100%;
 			text-align: left;
-			font-weight: bold;
+			@include font-weight(bold);
 		}
 
 		span {
@@ -28,7 +28,7 @@
 			right: 0;
 			padding: 10px;
 			font-size: 1.25rem;
-			font-weight: bold;
+			@include font-weight(bold);
 		}
 	}
 }
