@@ -116,12 +116,12 @@ export const GameweekData = ({ selectGameweek }: GameweekDataProps) => {
 		}
 	);
 
-	let topElementWebName = topElement?.[0]?.web_name || '';
+	let topElementFirstName = topElement?.[0]?.first_name || '';
 	let topElementSecondName = topElement?.[0]?.second_name || '';
 
 	const { data: playerDataId } = useQuery(
-		['player-id', topElementWebName, topElementSecondName],
-		() => getPlayerDataId(topElementWebName, topElementSecondName),
+		['player-id', topElementFirstName, topElementSecondName],
+		() => getPlayerDataId(topElementFirstName, topElementSecondName),
 		{
 			refetchOnWindowFocus: false,
 		}

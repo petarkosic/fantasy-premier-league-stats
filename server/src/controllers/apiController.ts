@@ -168,7 +168,7 @@ export const getPlayerDataId = async (
 			},
 		});
 
-		if (!response.data.data.points || response.data.data.points.length === 0) {
+		if (!response.data.data[0].id) {
 			throw new Error('Player not found');
 		}
 
