@@ -99,6 +99,10 @@
 				margin: 0;
 				padding-top: 10px;
 				@include flex(row, center, flex-end);
+
+				button {
+					color: white;
+				}
 			}
 		}
 	}

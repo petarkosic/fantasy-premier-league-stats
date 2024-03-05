@@ -34,6 +34,7 @@ The Fantasy Premier League Stats offers a user-friendly interface for football e
 ## How to run
 
 <br/>
+
 ### With Docker
 
 If you prefer to use docker, make sure that you have docker installed and running on your machine.
