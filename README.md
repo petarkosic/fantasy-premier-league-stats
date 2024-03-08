@@ -58,11 +58,13 @@ RapidAPI_Heatmap_Url=https://sofasport.p.rapidapi.com/v1/players/heatmap
 To start the application, from the root project directory run:
 
 ```
-docker compose up
+docker compose up -d
 ```
 
-Default port for client side is **3000**. (http://127.0.0.1:3000/)
-Default port for server side is **5000**. (http://127.0.0.1:5000/)
+- Default port for client side is **3000**. (http://127.0.0.1:3000/)
+- Default port for server side is **5000**. (http://127.0.0.1:5000/)
+- Default port for prometheus is **9090**. (http://127.0.0.1:9090/)
+- Default port for grafana is **4000**. (http://127.0.0.1:4000/)
 
 To stop the application, from the root project directory run:
 
@@ -75,6 +77,7 @@ docker compose down
 ### Without Docker
 
 Make sure that you have node.js 16.+ version installed.
+Prometheus and grafana are not available without docker.
 
 ```
 git clone https://github.com/petarkosic/fantasy-premier-league-stats.git
@@ -108,5 +111,5 @@ To start the client, open `/client` folder and run:
 npm run dev
 ```
 
-Default port for client side is **3000**. (http://127.0.0.1:3000/)
-Default port for server side is **5000**. (http://127.0.0.1:5000/)
+- Default port for client side is **3000**. (http://127.0.0.1:3000/)
+- Default port for server side is **5000**. (http://127.0.0.1:5000/)
