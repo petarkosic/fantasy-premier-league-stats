@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import { NotFound } from './components/NotFound/NotFound';
+import Predict from './components/Predict/Predict';
 
 const Home = lazy(() =>
 	import('./pages/Home/Home').then(({ Home }) => ({ default: Home }))
@@ -17,6 +18,7 @@ function App() {
 			<Routes>
 				<Route path='/' element={<Home />} />
 				<Route path='/gameweek' element={<Gameweek />} />
+				<Route path='/predict' element={<Predict />} />
 				<Route path='*' element={<NotFound />} />
 			</Routes>
 		</Suspense>

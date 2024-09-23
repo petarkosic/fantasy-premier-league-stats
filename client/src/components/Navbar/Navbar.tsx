@@ -10,6 +10,9 @@ export const Navbar = () => {
 			<div className={styles.select}>
 				<Link to='/gameweek'>Player of the Week</Link>
 			</div>
+			<div className={styles.select}>
+				<Link to='/predict'>Predict</Link>
+			</div>
 		</div>
 	);
 };
