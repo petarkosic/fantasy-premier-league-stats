@@ -12,6 +12,7 @@ services:
       - ./server:/usr/src/app
     networks:
       - fpl-net
+
   client:
     build:
       context: ./client
@@ -24,6 +25,19 @@ services:
       - ./client:/app
     networks:
       - fpl-net
+
+  predict:
+    build:
+      context: ./predict
+      dockerfile: Dockerfile
+    container_name: fpl-predict
+    ports:
+      - '5001:5000'
+    volumes:
+      - ./predict:/app
+    networks:
+      - fpl-net
+
   prometheus:
     container_name: fpl-prometheus
     image: prom/prometheus
