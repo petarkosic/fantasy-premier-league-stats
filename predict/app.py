@@ -1,83 +1,126 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import StandardScaler, RobustScaler
-from sklearn.metrics import mean_squared_error, mean_absolute_error, mean_absolute_percentage_error, r2_score
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import r2_score
+import csv
+import requests
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return 'Hello, World!'
+def load_data(player_data_file, history_data_file):
+    player_data = pd.read_csv(player_data_file)
+    history_data = pd.read_csv(history_data_file)
+    return player_data, history_data
 
+def preprocess_and_train(player_data, history_data):
+    avg_stats = calculate_average_stats(history_data)
+    merged_data = pd.merge(player_data, avg_stats, on='id', suffixes=('', '_avg'))
+    
+    features = [
+        'minutes_avg', 'goals_scored_avg', 'assists_avg', 'clean_sheets_avg',
+        'goals_conceded_avg', 'own_goals_avg', 'penalties_saved_avg',
+        'penalties_missed_avg', 'bonus_avg', 'bps_avg', 'influence_avg', 
+        'creativity_avg', 'threat_avg', 'expected_goals_avg', 'expected_assists_avg',
+        'expected_goal_involvements_avg', 'form', 'points_per_game', 
+        'chance_of_playing_next_round', 
+    ]
+    
+    X = merged_data[features]
+    
+    y_minutes = (merged_data['minutes_avg'] >= 60).astype(int) * 2 + (merged_data['minutes_avg'] < 60).astype(int)
+    y_goals = merged_data['goals_scored_avg']
+    y_assists = merged_data['assists_avg'] * 3
+    y_clean_sheets = merged_data['clean_sheets_avg']
+    y_bonus = merged_data['bonus_avg']
+    
+    models = []
+    scalers = []
+    for y in [y_minutes, y_goals, y_assists, y_clean_sheets, y_bonus]:
+        model, scaler = train_model(X, y)
+        models.append(model)
+        scalers.append(scaler)
+    
+    return models, scalers, merged_data
 
-@app.route('/predict', methods=['get'])
-def predict_points():
+def calculate_average_stats(history_data, num_weeks=5):
+    recent_history = history_data.sort_values(['id', 'round']).groupby('id').tail(num_weeks)
+    avg_stats = recent_history.groupby('id').agg({
+        'minutes': 'mean',
+        'goals_scored': 'mean',
+        'assists': 'mean',
+        'clean_sheets': 'mean',
+        'goals_conceded': 'mean',
+        'own_goals': 'mean',
+        'penalties_saved': 'mean',
+        'penalties_missed': 'mean',
+        'bonus': 'mean',
+        'bps': 'mean',
+        'influence': 'mean',
+        'creativity': 'mean',
+        'threat': 'mean',
+        'expected_goals': 'mean',
+        'expected_assists': 'mean',
+        'expected_goal_involvements': 'mean',
+    }).reset_index()
+    return avg_stats
+
+def train_model(X, y):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+    
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    model.fit(X_train_scaled, y_train)
+    
+    train_score = model.score(X_train_scaled, y_train)
+    test_score = model.score(X_test_scaled, y_test)
+    
+    print(f"Train R2 Score: {train_score:.4f}, Test R2 Score: {test_score:.4f}")
+    
+    return model, scaler
+
+def predict_next_week(models, scalers, X, merged_data):
+    predictions = []
+    for model, scaler in zip(models, scalers):
+        X_scaled = scaler.transform(X)
+        predictions.append(model.predict(X_scaled))
+    
+    results = pd.DataFrame({
+        'id': merged_data['id'],
+        'name': merged_data['first_name'] + ' ' + merged_data['second_name'],
+        'minutes': predictions[0],
+        'goals': predictions[1],
+        'assists': predictions[2],
+        'clean_sheets': predictions[3],
+        'bonus': predictions[4],
+    })
+    
+    results['total_predicted_points'] = results['minutes'] + results['goals'] + results['assists'] + \
+                                        results['clean_sheets'] + results['bonus']
+    
+    return results.sort_values('total_predicted_points', ascending=False)
+
+@app.route('/predict', methods=['GET'])
+def predict_next_week_route():
     try:
-        history_data = pd.read_csv('history-data.csv')
-        player_data = pd.read_csv('player-data.csv')
-
-        features = ['id', 'minutes', 'goals_scored', 'assists', 'clean_sheets', 'goals_conceded',
-                    'expected_goals', 'expected_assists', 'influence', 'creativity', 'threat']
-        target = 'points'
-
-        # Scale the data
-        scaler = RobustScaler()
-        history_data[features] = scaler.fit_transform(history_data[features])
-
-        X = history_data[features]
-        y = history_data[target]
-
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-
-        model = LinearRegression()
-        model.fit(X_train.values, y_train.values)
-
-        y_pred = model.predict(X_test.values)
-
-        y_test_nonzero = y_test[y_test != 0]
-        y_pred_nonzero = y_pred[y_test != 0]
-
-        mse = mean_squared_error(y_test, y_pred)
-        mae = mean_absolute_error(y_test, y_pred)
-        mape = mean_absolute_percentage_error(y_test_nonzero, y_pred_nonzero)
-        r2 = r2_score(y_test, y_pred)
-
-        current_players = player_data[['name'] + features].dropna()
-        X_current = current_players[features]
-
-        # Scale the current data
-        X_current = scaler.transform(X_current)
-
-        predictions = model.predict(X_current)
-        predictions_scaled = predictions / 10
-
-        current_players['predicted_points'] = predictions_scaled
-
-        top_players = current_players.sort_values('predicted_points', ascending=False).head(30)
-
-        top_player = top_players.iloc[0]
-
-        feature_importance = pd.DataFrame({'feature': features, 'importance': model.coef_})
-        feature_importance = feature_importance.sort_values('importance', ascending=False)
-
-        return jsonify({
-            'model_performance': {
-                'mse': mse,
-                'mae': mae,
-                'mape': mape,
-                'r2': r2
-            },
-            'top_players': top_players[['id', 'name', 'predicted_points']].to_dict('records'),
-            'top_player': {
-                'id': int(top_player['id'].astype(str)),
-                'name': top_player['name'],
-                'predicted_points': float(top_player['predicted_points'])
-            },
-            'feature_importance': feature_importance.to_dict('records')
-        })
-
+        player_data, history_data = load_data('player-data.csv', 'history-data.csv')
+        models, scalers, merged_data = preprocess_and_train(player_data, history_data)
+        
+        X = merged_data[['minutes_avg', 'goals_scored_avg', 'assists_avg', 'clean_sheets_avg',
+                         'goals_conceded_avg', 'own_goals_avg', 'penalties_saved_avg',
+                         'penalties_missed_avg', 'bonus_avg', 'bps_avg', 'influence_avg', 
+                         'creativity_avg', 'threat_avg', 'expected_goals_avg', 'expected_assists_avg',
+                         'expected_goal_involvements_avg', 'form', 'points_per_game', 
+                         'chance_of_playing_next_round']]
+        
+        predictions = predict_next_week(models, scalers, X, merged_data)
+        
+        top_10 = predictions.head(30).to_dict(orient='records')
+        return jsonify({'top_predicted_players': top_10})
+    
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
