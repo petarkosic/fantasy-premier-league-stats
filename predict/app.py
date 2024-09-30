@@ -90,7 +90,7 @@ def predict_next_week(models, scalers, X, merged_data):
     
     results = pd.DataFrame({
         'id': merged_data['id'],
-        'name': merged_data['first_name'] + ' ' + merged_data['second_name'],
+        'name': merged_data['name'],
         'minutes': predictions[0],
         'goals': predictions[1],
         'assists': predictions[2],
@@ -100,7 +100,7 @@ def predict_next_week(models, scalers, X, merged_data):
     
     results['total_predicted_points'] = results['minutes'] + results['goals'] + results['assists'] + \
                                         results['clean_sheets'] + results['bonus']
-    
+
     return results.sort_values('total_predicted_points', ascending=False)
 
 @app.route('/predict', methods=['GET'])
@@ -118,7 +118,8 @@ def predict_next_week_route():
         
         predictions = predict_next_week(models, scalers, X, merged_data)
         
-        top_10 = predictions.head(30).to_dict(orient='records')
+        top_10 = predictions.head(20).to_dict(orient='records')
+        
         return jsonify({'top_predicted_players': top_10})
     
     except Exception as e:
