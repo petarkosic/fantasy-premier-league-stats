@@ -4,124 +4,145 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import r2_score
-import csv
-import requests
+import joblib
+import os
+from datetime import datetime
+from scraper import fetch_fpl_data
 
 app = Flask(__name__)
 
-def load_data(player_data_file, history_data_file):
-    player_data = pd.read_csv(player_data_file)
-    history_data = pd.read_csv(history_data_file)
-    return player_data, history_data
+MODEL_PATH = 'fpl_model.joblib'
+SCALER_PATH = 'fpl_scaler.joblib'
 
-def preprocess_and_train(player_data, history_data):
-    avg_stats = calculate_average_stats(history_data)
-    merged_data = pd.merge(player_data, avg_stats, on='id', suffixes=('', '_avg'))
-    
+def load_data():
+    data_dir = os.path.dirname(__file__)
+    files = [f for f in os.listdir(data_dir) if os.path.isfile(os.path.join(data_dir, f)) and f.endswith('.csv')]
+    if not files:
+        return None
+    latest_file = max(files, key=lambda f: os.path.getctime(os.path.join(data_dir, f)))
+    file_path = os.path.join(data_dir, latest_file)
+    try:
+        return pd.read_csv(file_path, encoding='utf-8-sig', on_bad_lines='skip')
+    except Exception as e:
+        print(f"Error reading file {file_path}: {str(e)}")
+        return None
+
+
+def preprocess_and_train(data):
     features = [
-        'minutes_avg', 'goals_scored_avg', 'assists_avg', 'clean_sheets_avg',
-        'goals_conceded_avg', 'own_goals_avg', 'penalties_saved_avg',
-        'penalties_missed_avg', 'bonus_avg', 'bps_avg', 'influence_avg', 
-        'creativity_avg', 'threat_avg', 'expected_goals_avg', 'expected_assists_avg',
-        'expected_goal_involvements_avg', 'form', 'points_per_game', 
-        'chance_of_playing_next_round', 
+        'total_points_x', 'goals_scored_x', 'assists_x', 'clean_sheets_x', 'bonus_x', 'bps_x',
+        'expected_goals_x', 'expected_assists_x', 'expected_goal_involvements_x',
+        'expected_goals_per_90', 'expected_assists_per_90', 'expected_goal_involvements_per_90',
+        'minutes_x', 'influence_x', 'creativity_x', 'threat_x', 'ict_index_x',
+        'assists_mean', 'bonus_mean', 'bps_mean', 'clean_sheets_mean', 'creativity_mean',
+        'goals_conceded_mean', 'goals_scored_mean', 'ict_index_mean', 'influence_mean',
+        'minutes_mean', 'own_goals_mean', 'penalties_missed_mean', 'penalties_saved_mean',
+        'red_cards_mean', 'saves_mean', 'selected_mean', 'threat_mean', 'total_points_mean',
+        'transfers_balance_mean', 'transfers_in_mean', 'transfers_out_mean', 'value_mean',
+        'yellow_cards_mean'
     ]
-    
-    X = merged_data[features]
-    
-    y_minutes = (merged_data['minutes_avg'] >= 60).astype(int) * 2 + (merged_data['minutes_avg'] < 60).astype(int)
-    y_goals = merged_data['goals_scored_avg']
-    y_assists = merged_data['assists_avg'] * 3
-    y_clean_sheets = merged_data['clean_sheets_avg']
-    y_bonus = merged_data['bonus_avg']
-    
-    models = []
-    scalers = []
-    for y in [y_minutes, y_goals, y_assists, y_clean_sheets, y_bonus]:
-        model, scaler = train_model(X, y)
-        models.append(model)
-        scalers.append(scaler)
-    
-    return models, scalers, merged_data
 
-def calculate_average_stats(history_data, num_weeks=5):
-    recent_history = history_data.sort_values(['id', 'round']).groupby('id').tail(num_weeks)
-    avg_stats = recent_history.groupby('id').agg({
-        'minutes': 'mean',
-        'goals_scored': 'mean',
-        'assists': 'mean',
-        'clean_sheets': 'mean',
-        'goals_conceded': 'mean',
-        'own_goals': 'mean',
-        'penalties_saved': 'mean',
-        'penalties_missed': 'mean',
-        'bonus': 'mean',
-        'bps': 'mean',
-        'influence': 'mean',
-        'creativity': 'mean',
-        'threat': 'mean',
-        'expected_goals': 'mean',
-        'expected_assists': 'mean',
-        'expected_goal_involvements': 'mean',
-    }).reset_index()
-    return avg_stats
-
-def train_model(X, y):
+    X = data[features]
+    y = data['y']
+    
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
     
     model = RandomForestRegressor(n_estimators=100, random_state=42)
     model.fit(X_train_scaled, y_train)
-    
+
     train_score = model.score(X_train_scaled, y_train)
     test_score = model.score(X_test_scaled, y_test)
     
     print(f"Train R2 Score: {train_score:.4f}, Test R2 Score: {test_score:.4f}")
     
+    if train_score > 0.9 and test_score < 0.5:
+        print("Model is overfitting.")
+    elif train_score < 0.5 and test_score < 0.5:
+        print("Model is underfitting.")
+    
+    joblib.dump(model, MODEL_PATH)
+    joblib.dump(scaler, SCALER_PATH)
+    
     return model, scaler
 
-def predict_next_week(models, scalers, X, merged_data):
-    predictions = []
-    for model, scaler in zip(models, scalers):
-        X_scaled = scaler.transform(X)
-        predictions.append(model.predict(X_scaled))
+def load_model_and_scaler():
+    if os.path.exists(MODEL_PATH) and os.path.exists(SCALER_PATH):
+        try:
+            model = joblib.load(MODEL_PATH)
+            scaler = joblib.load(SCALER_PATH)
+            return model, scaler
+        except Exception as e:
+            print(f"Error loading model or scaler: {str(e)}")
+            return None, None
+    else:
+        print("Model or scaler files do not exist.")
+        return None, None
+
+def predict_next_week(model, scaler, data):
+    features = [
+        'total_points_x', 'goals_scored_x', 'assists_x', 'clean_sheets_x', 'bonus_x', 'bps_x',
+        'expected_goals_x', 'expected_assists_x', 'expected_goal_involvements_x',
+        'expected_goals_per_90', 'expected_assists_per_90', 'expected_goal_involvements_per_90',
+        'minutes_x', 'influence_x', 'creativity_x', 'threat_x', 'ict_index_x',
+        'assists_mean', 'bonus_mean', 'bps_mean', 'clean_sheets_mean', 'creativity_mean',
+        'goals_conceded_mean', 'goals_scored_mean', 'ict_index_mean', 'influence_mean',
+        'minutes_mean', 'own_goals_mean', 'penalties_missed_mean', 'penalties_saved_mean',
+        'red_cards_mean', 'saves_mean', 'selected_mean', 'threat_mean', 'total_points_mean',
+        'transfers_balance_mean', 'transfers_in_mean', 'transfers_out_mean', 'value_mean',
+        'yellow_cards_mean'
+    ]
+
+    X = data[features]
+    X = data[features]
+    X_scaled = scaler.transform(X)
+    predictions = model.predict(X_scaled)
     
     results = pd.DataFrame({
-        'id': merged_data['id'],
-        'name': merged_data['name'],
-        'minutes': predictions[0],
-        'goals': predictions[1],
-        'assists': predictions[2],
-        'clean_sheets': predictions[3],
-        'bonus': predictions[4],
-    })
+        'id': data['id'],
+        'name': data['first_name'] + ' ' + data['second_name'],
+        'predicted_points': predictions
+    }).drop_duplicates(subset=['id'], keep='last')
     
-    results['total_predicted_points'] = results['minutes'] + results['goals'] + results['assists'] + \
-                                        results['clean_sheets'] + results['bonus']
-
-    return results.sort_values('total_predicted_points', ascending=False)
+    return results.sort_values('predicted_points', ascending=False)
 
 @app.route('/predict', methods=['GET'])
 def predict_next_week_route():
     try:
-        player_data, history_data = load_data('player-data.csv', 'history-data.csv')
-        models, scalers, merged_data = preprocess_and_train(player_data, history_data)
+        data = load_data()
+        if data is None:
+            return jsonify({'error': 'No data available. Please run the scraper first.'}), 400
         
-        X = merged_data[['minutes_avg', 'goals_scored_avg', 'assists_avg', 'clean_sheets_avg',
-                         'goals_conceded_avg', 'own_goals_avg', 'penalties_saved_avg',
-                         'penalties_missed_avg', 'bonus_avg', 'bps_avg', 'influence_avg', 
-                         'creativity_avg', 'threat_avg', 'expected_goals_avg', 'expected_assists_avg',
-                         'expected_goal_involvements_avg', 'form', 'points_per_game', 
-                         'chance_of_playing_next_round']]
+        model, scaler = load_model_and_scaler()
+        if model is None or scaler is None:
+            model, scaler = preprocess_and_train(data)
         
-        predictions = predict_next_week(models, scalers, X, merged_data)
+        predictions = predict_next_week(model, scaler, data)
         
-        top_10 = predictions.head(20).to_dict(orient='records')
+        top_20 = predictions.head(20).to_dict(orient='records')
         
-        return jsonify({'top_predicted_players': top_10})
+        return jsonify({'top_predicted_players': top_20})
     
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/scrape', methods=['GET'])
+def scrape_data():
+    data_dir = os.path.dirname(__file__)
+    files = [f for f in os.listdir(data_dir) if os.path.isfile(os.path.join(data_dir, f)) and f.endswith('.csv')]
+    
+    if files:
+        return jsonify({'message': 'Data file already exists'}), 200
+
+    try:
+        filename = fetch_fpl_data()
+        if filename:
+            return jsonify({'message': f'Data scraped successfully and saved to {filename}'}), 200
+        else:
+            return jsonify({'error': 'Failed to scrape data'}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
