@@ -4,12 +4,14 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import r2_score
+from flask_cors import CORS
 import joblib
 import os
 from datetime import datetime
 from scraper import fetch_fpl_data
 
 app = Flask(__name__)
+CORS(app)
 
 MODEL_PATH = 'fpl_model.joblib'
 SCALER_PATH = 'fpl_scaler.joblib'
@@ -96,7 +98,6 @@ def predict_next_week(model, scaler, data):
         'yellow_cards_mean'
     ]
 
-    X = data[features]
     X = data[features]
     X_scaled = scaler.transform(X)
     predictions = model.predict(X_scaled)

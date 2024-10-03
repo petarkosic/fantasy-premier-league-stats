@@ -1,0 +1,3 @@
+__pycache__
+fpl_model.joblib
+fpl_scaler.joblib
