@@ -32,6 +32,8 @@ def fetch_fpl_data():
         df_history = pd.DataFrame(historical_data)
 
         df_merged = pd.merge(df_history, df_players, left_on='element', right_on='id')
+
+        df_merged = df_merged.sort_values(by=['element', 'round'])
         
         df_merged['assists_mean'] = df_merged.groupby('element')['assists_x'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
         df_merged['bonus_mean'] = df_merged.groupby('element')['bonus_x'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
@@ -46,6 +48,12 @@ def fetch_fpl_data():
         df_merged['own_goals_mean'] = df_merged.groupby('element')['own_goals_x'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
         df_merged['penalties_missed_mean'] = df_merged.groupby('element')['penalties_missed_x'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
         df_merged['penalties_saved_mean'] = df_merged.groupby('element')['penalties_saved_x'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
+
+        df_merged['points_last_3'] = df_merged.groupby('element')['total_points_x'].transform(lambda x: x.rolling(window=3, min_periods=1).mean())
+        df_merged['points_last_5'] = df_merged.groupby('element')['total_points_x'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
+        df_merged['points_last_game'] = df_merged.groupby('element')['total_points_x'].shift(1)
+        df_merged['points_two_games_ago'] = df_merged.groupby('element')['total_points_x'].shift(2)
+
         df_merged['red_cards_mean'] = df_merged.groupby('element')['red_cards_x'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
         df_merged['saves_mean'] = df_merged.groupby('element')['saves_x'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
         df_merged['selected_mean'] = df_merged.groupby('element')['selected'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())

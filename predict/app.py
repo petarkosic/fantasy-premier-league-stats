@@ -41,7 +41,8 @@ def preprocess_and_train(data):
         'minutes_mean', 'own_goals_mean', 'penalties_missed_mean', 'penalties_saved_mean',
         'red_cards_mean', 'saves_mean', 'selected_mean', 'threat_mean', 'total_points_mean',
         'transfers_balance_mean', 'transfers_in_mean', 'transfers_out_mean', 'value_mean',
-        'yellow_cards_mean'
+        'yellow_cards_mean',
+        'points_last_3', 'points_last_5', 'points_last_game', 'points_two_games_ago'
     ]
 
     X = data[features]
@@ -95,7 +96,8 @@ def predict_next_week(model, scaler, data):
         'minutes_mean', 'own_goals_mean', 'penalties_missed_mean', 'penalties_saved_mean',
         'red_cards_mean', 'saves_mean', 'selected_mean', 'threat_mean', 'total_points_mean',
         'transfers_balance_mean', 'transfers_in_mean', 'transfers_out_mean', 'value_mean',
-        'yellow_cards_mean'
+        'yellow_cards_mean',
+        'points_last_3', 'points_last_5', 'points_last_game', 'points_two_games_ago'
     ]
 
     X = data[features]
