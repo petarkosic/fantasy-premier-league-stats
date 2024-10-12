@@ -1,13 +1,11 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler
-from sklearn.metrics import r2_score
 from flask_cors import CORS
 import joblib
 import os
-from datetime import datetime
 from scraper import fetch_fpl_data
 
 app = Flask(__name__)
@@ -32,17 +30,11 @@ def load_data():
 
 def preprocess_and_train(data):
     features = [
-        'total_points_x', 'goals_scored_x', 'assists_x', 'clean_sheets_x', 'bonus_x', 'bps_x',
         'expected_goals_x', 'expected_assists_x', 'expected_goal_involvements_x',
         'expected_goals_per_90', 'expected_assists_per_90', 'expected_goal_involvements_per_90',
-        'minutes_x', 'influence_x', 'creativity_x', 'threat_x', 'ict_index_x',
-        'assists_mean', 'bonus_mean', 'bps_mean', 'clean_sheets_mean', 'creativity_mean',
-        'goals_conceded_mean', 'goals_scored_mean', 'ict_index_mean', 'influence_mean',
-        'minutes_mean', 'own_goals_mean', 'penalties_missed_mean', 'penalties_saved_mean',
-        'red_cards_mean', 'saves_mean', 'selected_mean', 'threat_mean', 'total_points_mean',
-        'transfers_balance_mean', 'transfers_in_mean', 'transfers_out_mean', 'value_mean',
-        'yellow_cards_mean',
-        'points_last_3', 'points_last_5', 'points_last_game', 'points_two_games_ago'
+        'form',
+        'team_difficulty', 'opponent_difficulty',
+        'points_last_3', 'points_last_5', 'points_last_game', 'points_two_games_ago',
     ]
 
     X = data[features]
@@ -87,16 +79,10 @@ def load_model_and_scaler():
 
 def predict_next_week(model, scaler, data):
     features = [
-        'total_points_x', 'goals_scored_x', 'assists_x', 'clean_sheets_x', 'bonus_x', 'bps_x',
         'expected_goals_x', 'expected_assists_x', 'expected_goal_involvements_x',
         'expected_goals_per_90', 'expected_assists_per_90', 'expected_goal_involvements_per_90',
-        'minutes_x', 'influence_x', 'creativity_x', 'threat_x', 'ict_index_x',
-        'assists_mean', 'bonus_mean', 'bps_mean', 'clean_sheets_mean', 'creativity_mean',
-        'goals_conceded_mean', 'goals_scored_mean', 'ict_index_mean', 'influence_mean',
-        'minutes_mean', 'own_goals_mean', 'penalties_missed_mean', 'penalties_saved_mean',
-        'red_cards_mean', 'saves_mean', 'selected_mean', 'threat_mean', 'total_points_mean',
-        'transfers_balance_mean', 'transfers_in_mean', 'transfers_out_mean', 'value_mean',
-        'yellow_cards_mean',
+        'form',
+        'team_difficulty', 'opponent_difficulty',
         'points_last_3', 'points_last_5', 'points_last_game', 'points_two_games_ago'
     ]
 
@@ -105,7 +91,7 @@ def predict_next_week(model, scaler, data):
     predictions = model.predict(X_scaled)
     
     results = pd.DataFrame({
-        'id': data['id'],
+        'id': data['id_x'],
         'name': data['first_name'] + ' ' + data['second_name'],
         'predicted_points': predictions
     }).drop_duplicates(subset=['id'], keep='last')
