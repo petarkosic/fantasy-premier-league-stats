@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 import logging
-import os
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -17,8 +16,21 @@ def fetch_fpl_data():
         players_response = requests.get(f"{BASE_URL}bootstrap-static/")
         players_data = players_response.json()['elements']
         
+        fixtures_response = requests.get(f"{BASE_URL}fixtures/")
+        fixtures_data = fixtures_response.json()
+
         df_players = pd.DataFrame(players_data)
+        df_fixtures = pd.DataFrame(fixtures_data)
         
+        df_fixtures = df_fixtures[[
+            'id',
+            'kickoff_time',
+            'team_h_difficulty',
+            'team_a_difficulty',
+        ]]
+
+        df_fixtures['kickoff_time'] = pd.to_datetime(df_fixtures['kickoff_time'])
+
         historical_data = []
         for player in players_data:
             player_id = player['id']
@@ -31,7 +43,13 @@ def fetch_fpl_data():
 
         df_history = pd.DataFrame(historical_data)
 
+        df_history['kickoff_time'] = pd.to_datetime(df_history['kickoff_time'])
+
         df_merged = pd.merge(df_history, df_players, left_on='element', right_on='id')
+        df_merged = pd.merge(df_merged, df_fixtures, left_on='kickoff_time', right_on='kickoff_time')
+
+        df_merged['team_difficulty'] = np.where(df_merged['was_home'], df_merged['team_h_difficulty'], df_merged['team_a_difficulty'])
+        df_merged['opponent_difficulty'] = np.where(df_merged['was_home'], df_merged['team_a_difficulty'], df_merged['team_h_difficulty'])
 
         df_merged = df_merged.sort_values(by=['element', 'round'])
         
@@ -65,7 +83,9 @@ def fetch_fpl_data():
         df_merged['value_mean'] = df_merged.groupby('element')['value'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
         df_merged['yellow_cards_mean'] = df_merged.groupby('element')['yellow_cards_x'].transform(lambda x: x.rolling(window=5, min_periods=1).mean())
         
-        df_merged['y'] = df_merged['total_points_x'] 
+        df_merged['y'] = df_merged['total_points_x'].shift(-1)
+
+        df_merged = df_merged.dropna(subset=['y'])
         
         current_date = datetime.now().strftime("%Y-%m-%d")
         filename = f"fpl_data_{current_date}.csv"
