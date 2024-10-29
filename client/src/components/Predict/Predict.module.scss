@@ -33,3 +33,11 @@
 		}
 	}
 }
+
+.loader {
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+	justify-content: center;
+	gap: 0.5rem;
+}

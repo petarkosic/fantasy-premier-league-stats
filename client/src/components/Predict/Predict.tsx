@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getPredictions } from '../../services/getPredictions';
+import { getPredictions, scrapeData } from '../../services/getPredictions';
 import { Navbar } from '../Navbar/Navbar';
 import styles from './Predict.module.scss';
 import PlayerSummary from '../PlayerSummary/PlayerSummary';
+import Loader from '../Loader/Loader';
 
 type PredictedPlayer = {
 	id: number;
@@ -11,12 +11,12 @@ type PredictedPlayer = {
 	predicted_points: number;
 };
 
-const Predict = () => {
+export const Predict = () => {
 	const {
 		data: predictions,
-		error,
 		isLoading,
 		isError,
+		refetch,
 	} = useQuery(['predict'], getPredictions, {
 		refetchOnWindowFocus: false,
 	});
@@ -35,11 +35,26 @@ const Predict = () => {
 	}
 
 	if (isLoading) {
-		return <div>Loading...</div>;
+		return (
+			<div className={styles.loader}>
+				Loading <Loader />
+			</div>
+		);
 	}
 
 	if (isError) {
-		return <div>{error as ReactNode}</div>;
+		scrapeData().then(() => {
+			refetch();
+		});
+
+		return (
+			<>
+				<div className={styles.loader}>
+					Scraping data <Loader />
+				</div>
+				<p>(this may take a few minutes)</p>
+			</>
+		);
 	}
 
 	return (
@@ -86,5 +101,3 @@ const Predict = () => {
 		</>
 	);
 };
-
-export default Predict;

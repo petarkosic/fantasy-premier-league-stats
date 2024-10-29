@@ -6,6 +6,7 @@ import { getStats } from '../../services/getStats';
 import { useDebounce } from '../../hooks/useDebounce';
 import { Navbar } from '../../components/Navbar/Navbar';
 import styles from './Home.module.scss';
+import Loader from '../../components/Loader/Loader';
 
 export const Home = () => {
 	const [playerName, setPlayerName] = useState<string>('');
@@ -33,7 +34,11 @@ export const Home = () => {
 	};
 
 	if (isLoading) {
-		return <div>Loading...</div>;
+		return (
+			<div className={styles.loader}>
+				Loading <Loader />
+			</div>
+		);
 	}
 	if (isError) {
 		return <div>{error as ReactNode}</div>;

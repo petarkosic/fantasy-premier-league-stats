@@ -3,3 +3,11 @@
 	margin: 1rem auto;
 	font-size: 1.25rem;
 }
+
+.loader {
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+	justify-content: center;
+	gap: 0.5rem;
+}
